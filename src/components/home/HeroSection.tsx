@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-import heroFood from '@/assets/hero-food.jpg';
+import heroFood from '@/assets/chicken chesee.jpg';
 
 export const HeroSection = () => {
   const handleWhatsAppOrder = () => {
