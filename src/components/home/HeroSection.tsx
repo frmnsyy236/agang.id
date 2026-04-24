@@ -13,19 +13,18 @@ export const HeroSection = () => {
   return (
     <section className="relative min-h-[90vh] flex items-center bg-gradient-hero overflow-hidden">
       {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-5">
+      {/* <div className="absolute inset-0 opacity-5">
         <div className="absolute top-20 left-10 text-8xl">🍜</div>
         <div className="absolute top-40 right-20 text-6xl">🥟</div>
         <div className="absolute bottom-32 left-1/4 text-7xl">🍚</div>
         <div className="absolute bottom-20 right-10 text-5xl">🥢</div>
-      </div>
+      </div> */}
 
-      <div className="container mx-auto px-4 py-12 md:py-20">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+      <div className="container mx-auto px-20 py-30 md:py-200">
+        <div className="grid lg:grid-cols-2 gap-20 items-center">
           {/* Content */}
           <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }} className="text-center lg:text-left space-y-6">
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">
-              <Sparkles size={16} />
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="inline-flex items-center gap-2 bg-red-100 text-red-700 px-4 py-2 rounded-full text-sm font-bold">
               <span>Kelezatan Autentik Asia</span>
             </motion.div>
 
@@ -48,13 +47,13 @@ export const HeroSection = () => {
               {/* Menu */}
               <div className="text-center sm:text-left">
                 {/* <p className="mb-2 text-muted-foreground select-text">Lihat daftar menu lengkap kami</p> */}
-                <Button variant="outline" size="xl" asChild className="pointer-events-auto">
-                  <Link to="/menu">Lihat Menu</Link>
+                <Button size="xl" asChild className="inline-flex items-center gap-2 bg-red-100 text-red-700 px-4 py-2 font-bold">
+                  <Link to="/Products">Lihat Menu</Link>
                 </Button>
               </div>
             </div>
 
-            {/* Stats */}
+            {/* Stats
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }} className="flex gap-8 justify-center lg:justify-start pt-4">
               <div className="text-center">
                 <div className="font-display text-2xl md:text-3xl font-bold text-primary">11+</div>
@@ -68,7 +67,7 @@ export const HeroSection = () => {
                 <div className="font-display text-2xl md:text-3xl font-bold text-primary">4.9</div>
                 <div className="text-sm text-muted-foreground">Rating</div>
               </div>
-            </motion.div>
+            </motion.div> */}
           </motion.div>
 
           {/* Hero Image */}
@@ -80,16 +79,14 @@ export const HeroSection = () => {
                 <img src={heroFood} alt="Makanan lezat dari Agang.id - Rice Bowl, Taiwan, Dimsum" className="w-full h-full object-cover rounded-3xl shadow-2xl" />
               </motion.div>
 
-              {/* Floating Elements */}
-              <motion.div animate={{ y: [0, -15, 0], rotate: [0, 5, 0] }} transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }} className="absolute -top-4 -right-4 bg-card p-4 rounded-2xl shadow-lg">
+              {/* <motion.div animate={{ y: [0, -15, 0], rotate: [0, 5, 0] }} transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 4 }} className="absolute top-4 right-4 bg-card p-4 rounded-2xl shadow-lg z-20">
                 <div className="text-3xl">🥟</div>
                 <div className="text-xs font-medium text-foreground mt-1">Dimsum</div>
-              </motion.div>
-
-              <motion.div animate={{ y: [0, 10, 0], rotate: [0, -5, 0] }} transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }} className="absolute -bottom-4 -left-4 bg-card p-4 rounded-2xl shadow-lg">
+              </motion.div> */}
+              {/* <motion.div animate={{ y: [0, 10, 0], rotate: [0, -5, 0] }} transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }} className="absolute top-4 right-4 bg-card p-4 rounded-2xl shadow-lg z-20">
                 <div className="text-3xl">🍚</div>
                 <div className="text-xs font-medium text-foreground mt-1">Rice Bowl</div>
-              </motion.div>
+              </motion.div> */}
             </div>
           </motion.div>
         </div>

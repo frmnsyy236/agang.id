@@ -7,7 +7,7 @@ import { CategoryFilter } from "@/components/menu/CategoryFilter";
 import { menuItems } from "@/data/menuData";
 import { Helmet } from "react-helmet-async";
 
-const Menu = () => {
+const Products = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [activeCategory, setActiveCategory] = useState(
     searchParams.get("category") || "all"
@@ -95,4 +95,4 @@ const Menu = () => {
   );
 };
 
-export default Menu;
+export default Products;

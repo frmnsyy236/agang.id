@@ -3,7 +3,7 @@ import { Layout } from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { MapPin, Phone, Clock, Instagram, MessageCircle } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
-import aboutTeam from '@/assets/about-team.jpg';
+import aboutTeam from '@/assets/about team agang.jpg';
 
 const About = () => {
   const handleWhatsApp = () => {
@@ -14,7 +14,7 @@ const About = () => {
   return (
     <>
       <Helmet>
-        <title>Tentang Kami - Agang.id | Kuliner Asia Autentik</title>
+        <title>Products - Agang.id | Kuliner Asia Autentik</title>
         <meta name="description" content="Kenali lebih dekat Agang.id - bisnis kuliner online yang menyajikan Rice Bowl, Makanan Taiwan, dan Dimsum premium." />
       </Helmet>
       <Layout>

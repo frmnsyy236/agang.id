@@ -19,7 +19,7 @@ export const FeaturedSection = () => {
       <div className="container mx-auto px-4">
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 bg-secondary/20 text-secondary px-4 py-2 rounded-full text-sm font-medium mb-4">
+          <div className="inline-flex items-center gap-2 bg-red/100 text-yellow-500 px-4 py-2 rounded-full text-sm font-bold mb-4">
             <Flame size={16} />
             <span>Paling Favorit</span>
           </div>
@@ -67,7 +67,7 @@ export const FeaturedSection = () => {
                   <p className="text-sm text-muted-foreground line-clamp-2">{item.description}</p>
 
                   <div className="flex items-center justify-between pt-2">
-                    <span className="font-bold text-primary text-lg">{formatPrice(item.price)}</span>
+                    <span className="font-bold text-white text-lg md:text-xl">{formatPrice(item.price)}</span>
 
                     <Button variant="hero" size="sm" onClick={() => handleOrderItem(item.name, item.price)}>
                       Pesan
@@ -81,8 +81,8 @@ export const FeaturedSection = () => {
 
         {/* Button */}
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mt-10">
-          <Button variant="outline" size="lg" asChild>
-            <Link to="/menu">Lihat Semua Menu</Link>
+          <Button size="lg" asChild className="bg-white text-red-600 hover:bg-gray-200 font-bold px-8 rounded-xl shadow-lg-100">
+            <Link to="/Products">Lihat Semua Menu</Link>
           </Button>
         </motion.div>
       </div>

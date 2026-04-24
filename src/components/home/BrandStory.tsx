@@ -1,22 +1,22 @@
-import { motion } from "framer-motion";
-import { Heart, Leaf, ChefHat } from "lucide-react";
-import aboutStory from "@/assets/about-story.jpg";
+import { motion } from 'framer-motion';
+import { Heart, Leaf, ChefHat } from 'lucide-react';
+import aboutStory from '@/assets/cerita nya gerobak.jpg.jpeg';
 
 const values = [
   {
     icon: ChefHat,
-    title: "Kualitas Premium",
-    description: "Bahan-bahan segar pilihan dan resep autentik dari chef berpengalaman",
+    title: 'Kualitas Premium',
+    description: 'Bahan-bahan segar pilihan dan resep autentik dari chef berpengalaman',
   },
   {
     icon: Heart,
-    title: "Dibuat dengan Cinta",
-    description: "Setiap hidangan disiapkan dengan penuh perhatian dan dedikasi",
+    title: 'Dibuat dengan Cinta',
+    description: 'Setiap hidangan disiapkan dengan penuh perhatian dan dedikasi',
   },
   {
     icon: Leaf,
-    title: "Bahan Segar",
-    description: "Kami menggunakan bahan-bahan segar berkualitas setiap harinya",
+    title: 'Bahan Segar',
+    description: 'Kami menggunakan bahan-bahan segar berkualitas setiap harinya',
   },
 ];
 
@@ -26,23 +26,12 @@ export const BrandStory = () => {
       <div className="container mx-auto px-4">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Image */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="relative"
-          >
+          <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="relative">
             <div className="relative aspect-[4/3] rounded-3xl overflow-hidden">
-              <img
-                src={aboutStory}
-                alt="Dapur Agang.id"
-                className="w-full h-full object-cover"
-              />
+              <img src={aboutStory} alt="Dapur Agang.id" className="w-full h-full object-cover" />
               <div className="absolute inset-0 bg-gradient-to-t from-accent/60 to-transparent" />
               <div className="absolute bottom-6 left-6 right-6">
-                <p className="font-display text-2xl text-accent-foreground font-bold">
-                  "Kelezatan dalam setiap detail"
-                </p>
+                <p className="font-display text-2xl text-accent-foreground font-bold">"Hari ini gerobak, besok jaringan usaha"</p>
               </div>
             </div>
             {/* Decoration */}
@@ -50,27 +39,17 @@ export const BrandStory = () => {
           </motion.div>
 
           {/* Content */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="space-y-6"
-          >
+          <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="space-y-6">
             <div className="space-y-4">
               <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground">
-                Cerita di Balik{" "}
-                <span className="text-gradient">Agang.id</span>
+                Cerita di Balik <span className="text-gradient">Agang.id</span>
               </h2>
               <p className="text-muted-foreground leading-relaxed">
-                Berawal dari kecintaan akan kuliner Asia, Agang.id hadir untuk
-                membawa kelezatan autentik langsung ke meja makanmu. Dengan
-                resep turun-temurun dan sentuhan modern, kami berkomitmen
-                menyajikan hidangan terbaik.
+                Di pinggir jalan, berdiri sebuah gerobak sederhana bernama Agang.id. Terlihat biasa, tapi menyimpan mimpi yang luar biasa. Setiap porsi yang disajikan bukan hanya tentang makanan, tapi tentang perjuangan, konsistensi, dan
+                harapan akan masa depan.
               </p>
               <p className="text-muted-foreground leading-relaxed">
-                Dari rice bowl yang praktis hingga dimsum yang menggugah selera,
-                setiap menu kami adalah hasil dari passion dan dedikasi untuk
-                memberikan pengalaman kuliner yang tak terlupakan.
+                Hari ini mungkin kecil, tapi Agang.id tidak dibangun untuk hari ini saja melainkan untuk sesuatu yang jauh lebih besar. Semua yang besar, selalu dimulai dari yang sederhana.
               </p>
             </div>
 
@@ -88,12 +67,8 @@ export const BrandStory = () => {
                     <value.icon size={24} />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-foreground mb-1">
-                      {value.title}
-                    </h3>
-                    <p className="text-sm text-muted-foreground">
-                      {value.description}
-                    </p>
+                    <h3 className="font-semibold text-foreground mb-1">{value.title}</h3>
+                    <p className="text-sm text-muted-foreground">{value.description}</p>
                   </div>
                 </motion.div>
               ))}
