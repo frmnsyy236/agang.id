@@ -44,7 +44,8 @@ export const AdminBlog: React.FC = () => {
     addArticle,
     updateArticle,
     deleteArticle,
-    resetToDefault
+    resetToDefault,
+    isCloudConnected
   } = useBlog();
 
   // PIN Authentication state
@@ -484,9 +485,9 @@ export const AdminBlog: React.FC = () => {
             </div>
             <div className="p-4 rounded-2xl bg-[#520909] border border-white/10">
               <span className="block text-[11px] font-bold text-white/60 uppercase">Database Status</span>
-              <span className="font-display text-xs sm:text-sm font-bold text-emerald-400 flex items-center gap-1 mt-2">
+              <span className={`font-display text-xs sm:text-sm font-bold flex items-center gap-1 mt-2 ${isCloudConnected ? 'text-emerald-400' : 'text-amber-300'}`}>
                 <CheckCircle2 size={15} />
-                <span>LocalStorage Aktif</span>
+                <span>{isCloudConnected ? 'Supabase Cloud Aktif' : 'Menghubungkan Cloud...'}</span>
               </span>
             </div>
           </div>
