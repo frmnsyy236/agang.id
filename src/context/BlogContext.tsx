@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 import { Article, ArticleInput } from '@/types/blog';
 import { initialArticles } from '@/data/initialArticles';
 import { supabase } from '@/lib/supabase';
+import { toast } from 'sonner';
 
 interface BlogContextType {
   articles: Article[];
@@ -235,6 +236,11 @@ export const BlogProvider: React.FC<{ children: React.ReactNode }> = ({ children
       .then(({ error }) => {
         if (error) {
           console.warn('Failed to insert article into Supabase:', error.message);
+          toast.error('Gagal simpan ke Supabase Cloud: Tabel articles belum dibuat di SQL Editor Supabase!', {
+            duration: 7000
+          });
+        } else {
+          toast.success('Artikel tersimpan ke Supabase Cloud (Online untuk semua pengunjung)!');
         }
       })
       .catch((err) => {
@@ -270,6 +276,9 @@ export const BlogProvider: React.FC<{ children: React.ReactNode }> = ({ children
       .then(({ error }) => {
         if (error) {
           console.warn('Failed to update article in Supabase:', error.message);
+          toast.error('Gagal update ke Supabase: Tabel articles belum dibuat di dashboard Supabase!');
+        } else {
+          toast.success('Pembaruan artikel tersimpan ke Supabase Cloud!');
         }
       })
       .catch((err) => {
@@ -289,6 +298,9 @@ export const BlogProvider: React.FC<{ children: React.ReactNode }> = ({ children
       .then(({ error }) => {
         if (error) {
           console.warn('Failed to delete article from Supabase:', error.message);
+          toast.error('Gagal hapus di Supabase Cloud: Tabel articles belum dibuat!');
+        } else {
+          toast.success('Artikel berhasil dihapus dari Cloud Database!');
         }
       })
       .catch((err) => {

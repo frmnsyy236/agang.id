@@ -493,6 +493,32 @@ export const AdminBlog: React.FC = () => {
           </div>
         </div>
 
+        {/* Supabase Status Banner if not connected */}
+        {!isCloudConnected && (
+          <div className="bg-amber-950/80 border-2 border-amber-500 rounded-3xl p-5 shadow-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div className="flex items-start gap-3">
+              <AlertTriangle className="text-amber-400 shrink-0 mt-0.5" size={24} />
+              <div>
+                <h4 className="font-bold text-white text-sm sm:text-base">
+                  Database Cloud Supabase Belum Aktif (Tabel articles belum dibuat)
+                </h4>
+                <p className="text-white/80 text-xs sm:text-sm mt-0.5">
+                  Artikel baru yang Anda buat saat ini <strong>hanya tersimpan di browser Anda</strong> dan tidak akan terlihat oleh orang lain. Silakan buka <strong>SQL Editor</strong> di dashboard Supabase lalu jalankan script pembuat tabel agar artikel tersinkronisasi online untuk semua orang.
+                </p>
+              </div>
+            </div>
+            <a
+              href="https://supabase.com/dashboard/project/zvuwswmwiypwdalnhddi/sql/new"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="shrink-0 px-4 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs shadow-md transition-all flex items-center gap-1.5"
+            >
+              <span>Buka SQL Editor Supabase</span>
+              <ExternalLink size={14} />
+            </a>
+          </div>
+        )}
+
         {/* Action Toolbar */}
         <div className="bg-[#6f0f0f] border border-white/15 rounded-2xl p-4 shadow-xl flex flex-col sm:flex-row gap-3 items-center justify-between">
           <div className="relative w-full sm:w-80">
