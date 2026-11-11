@@ -85,6 +85,11 @@ export const Footer = () => {
                   Tentang Kami
                 </Link>
               </li>
+              <li>
+                <Link to="/blog" className="text-accent-foreground/80 hover:text-accent-foreground transition-colors">
+                  Artikel & Blog
+                </Link>
+              </li>
             </ul>
           </div>
         </div>

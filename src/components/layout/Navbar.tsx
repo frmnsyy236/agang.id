@@ -6,15 +6,22 @@ import { Button } from '@/components/ui/button';
 
 const navLinks = [
   { name: 'Home', path: '/' },
-  { name: 'Products', path: '/products ' },
+  { name: 'Products', path: '/products' },
   { name: 'Promo', path: '/promo' },
   { name: 'About Us', path: '/about' },
-  { name: 'Blog', path: 'https://www.knowlagi.my.id/2025/09/agandid.html' },
+  { name: 'Blog', path: '/blog' },
 ];
 
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+
+  const isActive = (path: string) => {
+    if (path === '/') return location.pathname === '/';
+    if (path === '/blog') return location.pathname === '/blog' || location.pathname === '/BlogPost' || location.pathname.startsWith('/blog/');
+    if (path === '/products') return location.pathname.toLowerCase().startsWith('/product') || location.pathname === '/menu';
+    return location.pathname.startsWith(path);
+  };
 
   const handleWhatsAppOrder = () => {
     const message = encodeURIComponent('Halo Agang.id! Saya ingin memesan makanan. Boleh lihat menu lengkapnya?');
@@ -36,12 +43,19 @@ export const Navbar = () => {
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-8">
-              {navLinks.map((link) => (
-                <Link key={link.path} to={link.path} className={`relative font-semibold text-sm transition-colors duration-300 ${location.pathname === link.path ? 'text-red-600' : 'text-black-600 hover:text-red-500'}`}>
-                  {link.name}
-                  {location.pathname === link.path && <motion.div layoutId="activeNav" className="absolute -bottom-1 left-0 right-0 h-0.5 bg-red-600 rounded-full" />}
-                </Link>
-              ))}
+              {navLinks.map((link) => {
+                const active = isActive(link.path);
+                return (
+                  <Link
+                    key={link.path}
+                    to={link.path}
+                    className={`relative font-semibold text-sm transition-colors duration-300 ${active ? 'text-red-600' : 'text-slate-600 hover:text-red-500'}`}
+                  >
+                    {link.name}
+                    {active && <motion.div layoutId="activeNav" className="absolute -bottom-1 left-0 right-0 h-0.5 bg-red-600 rounded-full" />}
+                  </Link>
+                );
+              })}
             </div>
 
             {/* CTA Button */}
@@ -65,7 +79,12 @@ export const Navbar = () => {
           <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="md:hidden mt-2 bg-white rounded-2xl shadow-xl border border-black-100 overflow-hidden">
             <div className="px-6 py-6 space-y-4">
               {navLinks.map((link) => (
-                <Link key={link.path} to={link.path} onClick={() => setIsOpen(false)} className="block font-semibold text-black-600">
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  onClick={() => setIsOpen(false)}
+                  className={`block font-semibold ${isActive(link.path) ? 'text-red-600' : 'text-slate-700'}`}
+                >
                   {link.name}
                 </Link>
               ))}
