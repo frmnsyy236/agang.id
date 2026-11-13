@@ -28,9 +28,12 @@ import {
   UploadCloud,
   ImagePlus,
   Loader2,
-  RefreshCw
+  RefreshCw,
+  BarChart3,
+  TrendingUp
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { AnalyticsDashboard } from '@/components/admin/AnalyticsDashboard';
 
 export const AdminBlog: React.FC = () => {
   const navigate = useNavigate();
@@ -51,6 +54,9 @@ export const AdminBlog: React.FC = () => {
   // PIN Authentication state
   const [pinInput, setPinInput] = useState('');
   const [loginError, setLoginError] = useState('');
+
+  // Admin Active Tab: 'analytics' (Grafik Pengunjung) atau 'articles' (Kelola Berita)
+  const [adminActiveTab, setAdminActiveTab] = useState<'analytics' | 'articles'>('analytics');
 
   // Dashboard Filters
   const [searchQuery, setSearchQuery] = useState('');
@@ -437,7 +443,45 @@ export const AdminBlog: React.FC = () => {
 
       {/* Main Admin Content Container */}
       <main className="container mx-auto px-4 max-w-7xl pt-8 space-y-8">
-        {/* Welcome & Stats Row */}
+        {/* Navigation Tabs Admin: Analytics vs Artikel */}
+        <div className="flex flex-wrap items-center gap-3">
+          <button
+            type="button"
+            onClick={() => setAdminActiveTab('analytics')}
+            className={`inline-flex items-center gap-2.5 px-6 py-3.5 rounded-2xl font-black text-xs sm:text-sm transition-all shadow-lg active:scale-95 ${
+              adminActiveTab === 'analytics'
+                ? 'bg-white text-red-950 shadow-2xl scale-[1.02]'
+                : 'bg-[#6f0f0f] text-white/75 hover:text-white border border-white/15 hover:bg-[#7e1414]'
+            }`}
+          >
+            <BarChart3 size={18} className={adminActiveTab === 'analytics' ? 'text-red-700' : 'text-amber-400'} />
+            <span>Grafik Pengunjung Web</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setAdminActiveTab('articles')}
+            className={`inline-flex items-center gap-2.5 px-6 py-3.5 rounded-2xl font-black text-xs sm:text-sm transition-all shadow-lg active:scale-95 ${
+              adminActiveTab === 'articles'
+                ? 'bg-white text-red-950 shadow-2xl scale-[1.02]'
+                : 'bg-[#6f0f0f] text-white/75 hover:text-white border border-white/15 hover:bg-[#7e1414]'
+            }`}
+          >
+            <BookOpen size={18} className={adminActiveTab === 'articles' ? 'text-red-700' : 'text-red-300'} />
+            <span>Kelola Artikel & Berita</span>
+            <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-[#520909] text-white">
+              {stats.total}
+            </span>
+          </button>
+        </div>
+
+        {/* Tab 1: Analytics Dashboard with Visitor Charts */}
+        {adminActiveTab === 'analytics' && <AnalyticsDashboard />}
+
+        {/* Tab 2: Article Management */}
+        {adminActiveTab === 'articles' && (
+          <div className="space-y-8">
+            {/* Welcome & Stats Row */}
         <div className="bg-[#6f0f0f] border border-white/15 rounded-3xl p-6 sm:p-8 shadow-2xl">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
             <div>
@@ -675,7 +719,9 @@ export const AdminBlog: React.FC = () => {
             </table>
           </div>
         </div>
-      </main>
+      </div>
+    )}
+  </main>
 
       {/* MODAL: CREATE / EDIT ARTICLE */}
       <AnimatePresence>

@@ -6,6 +6,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { BlogProvider } from '@/context/BlogContext';
 
+import { PageTracker } from '@/components/common/PageTracker';
+
 import Index from './pages/Index';
 import About from './pages/About';
 import Promo from './pages/Promo';
@@ -25,6 +27,7 @@ const App = () => (
           <Toaster />
           <Sonner position="top-center" richColors />
           <BrowserRouter>
+            <PageTracker />
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/about" element={<About />} />
