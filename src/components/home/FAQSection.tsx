@@ -50,16 +50,16 @@ export const FAQSection = () => {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <div className="inline-flex items-center gap-2 bg-red-100 text-red-700 px-4 py-2 rounded-full text-sm font-bold mb-4">
-            <HelpCircle size={16} />
+          <div className="inline-flex items-center gap-2 bg-amber-400/20 text-amber-300 border border-amber-400/30 px-4 py-1.5 rounded-full text-xs font-bold mb-4 shadow-sm">
+            <HelpCircle size={15} className="text-amber-400" />
             <span>Tanya Jawab (FAQ)</span>
           </div>
 
-          <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">
+          <h2 className="font-display text-3xl md:text-4xl font-bold mb-4 text-white">
             Pertanyaan Seputar <span className="text-gradient">Kuliner Makassar Agang.id</span>
           </h2>
 
-          <p className="text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-white/80 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed">
             Temukan jawaban lengkap seputar lokasi outlet, jam buka malam, menu favorit, hingga layanan pesanan via WhatsApp.
           </p>
         </motion.div>
@@ -68,19 +68,19 @@ export const FAQSection = () => {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="bg-card rounded-2xl border border-border p-6 md:p-8 shadow-sm"
+          className="bg-[#580b0b] rounded-3xl border border-white/15 p-6 md:p-8 shadow-2xl"
         >
           <Accordion type="single" collapsible defaultValue="faq-1" className="w-full space-y-4">
             {faqs.map((faq) => (
               <AccordionItem
                 key={faq.id}
                 value={faq.id}
-                className="border border-border/60 rounded-xl px-4 md:px-6 transition-colors hover:border-primary/40"
+                className="border border-white/15 rounded-2xl px-4 md:px-6 transition-colors hover:border-amber-400/40 bg-white/5"
               >
-                <AccordionTrigger className="text-left font-display text-base md:text-lg font-semibold text-foreground py-4 hover:no-underline">
+                <AccordionTrigger className="text-left font-display text-base md:text-lg font-bold text-white py-4 hover:no-underline">
                   {faq.question}
                 </AccordionTrigger>
-                <AccordionContent className="text-sm md:text-base text-muted-foreground leading-relaxed pt-1 pb-4">
+                <AccordionContent className="text-sm md:text-base text-white/80 leading-relaxed pt-1 pb-4">
                   {faq.answer}
                 </AccordionContent>
               </AccordionItem>

@@ -27,19 +27,20 @@ const Index = () => {
       <Layout>
         <HeroSection />
 
-        {/* Section Stats dengan Garis Oranye di Atasnya */}
-        <section className="bg-red py-12 border-t-[6px] border-yellow-500">
-          <div className="container mx-auto px-4 md:px-20">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+        {/* Section Keunggulan Agang.id */}
+        <section className="bg-[#520909] border-y border-white/15 py-8 md:py-10 shadow-inner">
+          <div className="container mx-auto px-4 max-w-6xl">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 text-center">
               {[
-                { value: '20 K+', label: 'Member Active' },
-                { value: '1 +', label: 'Outlet Store' },
-                { value: '0 +', label: 'Signature Store' },
-                { value: '1 +', label: 'Years Experience' },
+                { title: '100% Halal & Segar', desc: 'Daging ayam segar kualitas premium', icon: '🍗' },
+                { title: 'Mulai Rp5.000', desc: 'Harga merakyat & porsi kenyang', icon: '💰' },
+                { title: 'Buka Malam Hari', desc: '17.30 - 23.30 WITA setiap hari', icon: '🌙' },
+                { title: 'Order Antar Mudah', desc: 'Pesan langsung via WhatsApp', icon: '🛵' },
               ].map((item, index) => (
-                <div key={index}>
-                  <div className="text-4xl md:text-5xl font-bold text-white-700">{item.value}</div>
-                  <p className="text-sm font-medium text-white-600 mt-2 uppercase tracking-wide">{item.label}</p>
+                <div key={index} className="p-4 rounded-2xl bg-white/5 border border-white/10 hover:border-amber-400/30 transition-all">
+                  <div className="text-2xl sm:text-3xl mb-2">{item.icon}</div>
+                  <div className="text-sm sm:text-base font-black text-white">{item.title}</div>
+                  <p className="text-xs text-white/70 mt-1">{item.desc}</p>
                 </div>
               ))}
             </div>

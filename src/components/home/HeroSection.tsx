@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight, Flame } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import heroFood from '@/assets/chicken chesee.jpg';
@@ -11,84 +11,77 @@ export const HeroSection = () => {
   };
 
   return (
-    <section className="relative min-h-[90vh] flex items-center bg-gradient-hero overflow-hidden">
-      {/* Background Pattern */}
-      {/* <div className="absolute inset-0 opacity-5">
-        <div className="absolute top-20 left-10 text-8xl">🍜</div>
-        <div className="absolute top-40 right-20 text-6xl">🥟</div>
-        <div className="absolute bottom-32 left-1/4 text-7xl">🍚</div>
-        <div className="absolute bottom-20 right-10 text-5xl">🥢</div>
-      </div> */}
-
-      <div className="container mx-auto px-20 py-30 md:py-200">
-        <div className="grid lg:grid-cols-2 gap-20 items-center">
+    <section className="relative min-h-[85vh] flex items-center bg-gradient-hero overflow-hidden">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-16 md:pt-40 md:pb-24">
+        <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
           {/* Content */}
-          <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }} className="text-center lg:text-left space-y-6">
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="inline-flex items-center gap-2 bg-red-100 text-red-700 px-4 py-2 rounded-full text-sm font-bold">
-              <span>Kelezatan Autentik Asia</span>
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center lg:text-left space-y-6"
+          >
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="inline-flex items-center gap-2 bg-white/15 text-amber-200 border border-white/25 px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold backdrop-blur-sm shadow-sm"
+            >
+              <Flame size={15} className="text-amber-400" />
+              <span>Kuliner Malam Makassar Favorit</span>
             </motion.div>
 
-            <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-foreground">
-              Kuliner Malam Makassar Favorit: <span className="text-gradient">Rice Bowl, Taiwan Chicken & Dimsum Goreng Renyah</span>
+            <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-black leading-tight text-white max-w-2xl">
+              Kuliner Malam Makassar: <span className="text-gradient">Rice Bowl, Taiwan Chicken & Dimsum Goreng Renyah</span>
             </h1>
 
-            <p className="text-lg text-muted-foreground max-w-xl mx-auto lg:mx-0">
+            <p className="text-sm sm:text-base md:text-lg text-white/90 max-w-xl mx-auto lg:mx-0 leading-relaxed font-normal">
               Pilihan kuliner Makassar terenak di Inpres Maccini & Jl. Pongtiku (depan Bimbel JILC): Rice Bowl krispi sambel matah, Taiwan chicken gurih, kulit crispy renyah & dimsum keju lumer. Buka 17.30 - 23.30 WITA!
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-6 justify-center lg:justify-start relative z-10 pointer-events-auto">
-              {/* WhatsApp */}
-              <div className="text-center sm:text-left">
-                {/* <p className="mb-2 text-muted-foreground select-text">Pesan langsung lewat WhatsApp kami</p> */}
-                <Button variant="hero" size="xl" onClick={handleWhatsAppOrder} className="group pointer-events-auto">
-                  Order via WhatsApp
-                  <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
-                </Button>
-              </div>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start relative z-10 pt-2">
+              {/* WhatsApp Button */}
+              <Button
+                variant="whatsapp"
+                size="lg"
+                onClick={handleWhatsAppOrder}
+                className="group bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-8 shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2"
+              >
+                Order via WhatsApp
+                <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+              </Button>
 
-              {/* Menu */}
-              <div className="text-center sm:text-left">
-                {/* <p className="mb-2 text-muted-foreground select-text">Lihat daftar menu lengkap kami</p> */}
-                <Button size="xl" asChild className="inline-flex items-center gap-2 bg-red-100 text-red-700 px-4 py-2 font-bold">
-                  <Link to="/Products">Lihat Menu</Link>
-                </Button>
-              </div>
+              {/* Menu Button */}
+              <Button
+                size="lg"
+                asChild
+                className="inline-flex items-center justify-center gap-2 bg-white/15 hover:bg-white/25 text-white border border-white/30 backdrop-blur-sm px-8 font-bold shadow-md hover:scale-105 transition-all active:scale-95"
+              >
+                <Link to="/products">Lihat Daftar Menu</Link>
+              </Button>
             </div>
-
-            {/* Stats
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }} className="flex gap-8 justify-center lg:justify-start pt-4">
-              <div className="text-center">
-                <div className="font-display text-2xl md:text-3xl font-bold text-primary">11+</div>
-                <div className="text-sm text-muted-foreground">Menu Pilihan</div>
-              </div>
-              <div className="text-center">
-                <div className="font-display text-2xl md:text-3xl font-bold text-primary">10K+</div>
-                <div className="text-sm text-muted-foreground">Pelanggan Puas</div>
-              </div>
-              <div className="text-center">
-                <div className="font-display text-2xl md:text-3xl font-bold text-primary">4.9</div>
-                <div className="text-sm text-muted-foreground">Rating</div>
-              </div>
-            </motion.div> */}
           </motion.div>
 
           {/* Hero Image */}
-          <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 0.3 }} className="relative">
-            <div className="relative aspect-square max-w-lg mx-auto">
-              {/* Main Image Container */}
-              <div className="absolute inset-0 rounded-full bg-gradient-warm opacity-20 blur-3xl animate-pulse-glow" />
-              <motion.div animate={{ y: [0, -10, 0] }} transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }} className="relative z-10">
-                <img src={heroFood} alt="Kuliner Makassar Agang.id - Rice Bowl, Taiwan Chicken, Kulit Crispy dan Dimsum Goreng" className="w-full h-full object-cover rounded-3xl shadow-2xl" />
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="relative"
+          >
+            <div className="relative aspect-square max-w-md lg:max-w-lg mx-auto">
+              <div className="absolute inset-0 rounded-full bg-amber-400/20 blur-3xl animate-pulse-glow" />
+              <motion.div
+                animate={{ y: [0, -8, 0] }}
+                transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
+                className="relative z-10"
+              >
+                <img
+                  src={heroFood}
+                  alt="Kuliner Makassar Agang.id - Rice Bowl, Taiwan Chicken, Kulit Crispy dan Dimsum Goreng"
+                  className="w-full h-full object-cover rounded-3xl shadow-2xl border-4 border-white/15"
+                />
               </motion.div>
-
-              {/* <motion.div animate={{ y: [0, -15, 0], rotate: [0, 5, 0] }} transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 4 }} className="absolute top-4 right-4 bg-card p-4 rounded-2xl shadow-lg z-20">
-                <div className="text-3xl">🥟</div>
-                <div className="text-xs font-medium text-foreground mt-1">Dimsum</div>
-              </motion.div> */}
-              {/* <motion.div animate={{ y: [0, 10, 0], rotate: [0, -5, 0] }} transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }} className="absolute top-4 right-4 bg-card p-4 rounded-2xl shadow-lg z-20">
-                <div className="text-3xl">🍚</div>
-                <div className="text-xs font-medium text-foreground mt-1">Rice Bowl</div>
-              </motion.div> */}
             </div>
           </motion.div>
         </div>

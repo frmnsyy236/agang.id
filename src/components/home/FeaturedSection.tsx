@@ -14,20 +14,20 @@ export const FeaturedSection = () => {
   };
 
   return (
-    <section className="py-16 md:py-24 bg-muted/50">
-      <div className="container mx-auto px-4">
+    <section className="py-16 md:py-24 bg-[#4a0808]/60 border-t border-white/10">
+      <div className="container mx-auto px-4 max-w-7xl">
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 bg-red/100 text-yellow-500 px-4 py-2 rounded-full text-sm font-bold mb-4">
-            <Flame size={16} />
+          <div className="inline-flex items-center gap-2 bg-amber-400/20 text-amber-300 border border-amber-400/30 px-4 py-1.5 rounded-full text-xs font-bold mb-4 shadow-sm">
+            <Flame size={15} className="text-amber-400" />
             <span>Paling Favorit</span>
           </div>
 
-          <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">
+          <h2 className="font-display text-3xl md:text-4xl font-bold mb-4 text-white">
             Menu Kuliner <span className="text-gradient">Terlaris Makassar</span>
           </h2>
 
-          <p className="text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-white/80 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed">
             Pilihan favorit kuliner malam Makassar: Rice Bowl krispi sambel matah, Taiwan chicken gurih, kulit crispy renyah & dimsum keju lumer.
           </p>
         </motion.div>
@@ -38,9 +38,9 @@ export const FeaturedSection = () => {
             const displayPrice = item.priceDisplay || formatPrice(item.price);
             return (
               <motion.div key={item.id} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.1 }} className="group h-full">
-                <article className="bg-card rounded-2xl overflow-hidden border transition-all duration-300 hover:shadow-xl hover:-translate-y-2 h-full flex flex-col">
+                <article className="bg-[#580b0b] rounded-2xl overflow-hidden border border-white/15 transition-all duration-300 hover:shadow-2xl hover:border-amber-400/40 hover:-translate-y-2 h-full flex flex-col">
                   {/* Image */}
-                  <div className="relative aspect-square overflow-hidden">
+                  <div className="relative aspect-square overflow-hidden bg-black/20">
                     <img
                       src={item.image}
                       alt={`${item.name} - Kuliner Makassar Agang.id`}
@@ -58,7 +58,7 @@ export const FeaturedSection = () => {
                     />
 
                     {/* Badge */}
-                    <div className="absolute top-3 left-3 bg-secondary text-secondary-foreground px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
+                    <div className="absolute top-3 left-3 bg-amber-400 text-red-950 px-3 py-1 rounded-full text-xs font-black flex items-center gap-1 shadow-md">
                       <Star size={12} fill="currentColor" />
                       Favorit
                     </div>
@@ -67,14 +67,18 @@ export const FeaturedSection = () => {
                   {/* Content */}
                   <div className="p-4 space-y-3 flex-1 flex flex-col justify-between">
                     <div>
-                      <h3 className="font-semibold text-lg line-clamp-1">{item.name}</h3>
-                      <p className="text-sm text-muted-foreground line-clamp-2 mt-1">{item.description}</p>
+                      <h3 className="font-bold text-base md:text-lg text-white line-clamp-1">{item.name}</h3>
+                      <p className="text-xs text-white/75 line-clamp-2 mt-1 leading-relaxed">{item.description}</p>
                     </div>
 
-                    <div className="flex items-center justify-between pt-2 mt-auto">
-                      <span className="font-bold text-white text-base md:text-lg">{displayPrice}</span>
+                    <div className="flex items-center justify-between pt-3 mt-auto border-t border-white/10">
+                      <span className="font-black text-amber-300 text-sm sm:text-base">{displayPrice}</span>
 
-                      <Button variant="hero" size="sm" onClick={() => handleOrderItem(item.name, displayPrice)}>
+                      <Button
+                        size="sm"
+                        onClick={() => handleOrderItem(item.name, displayPrice)}
+                        className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-3.5 py-1.5 rounded-xl shadow-md transition-all active:scale-95"
+                      >
                         Pesan
                       </Button>
                     </div>
@@ -86,9 +90,13 @@ export const FeaturedSection = () => {
         </div>
 
         {/* Button */}
-        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mt-10">
-          <Button size="lg" asChild className="bg-white text-red-600 hover:bg-gray-200 font-bold px-8 rounded-xl shadow-lg-100">
-            <Link to="/Products">Lihat Semua Menu</Link>
+        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mt-12">
+          <Button
+            size="lg"
+            asChild
+            className="bg-white hover:bg-neutral-100 text-red-950 font-black px-8 py-3.5 rounded-2xl shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 transition-all border border-white/20"
+          >
+            <Link to="/products">Lihat Semua Menu Lengkap</Link>
           </Button>
         </motion.div>
       </div>

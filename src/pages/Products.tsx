@@ -44,20 +44,19 @@ const Products = () => {
         />
       </Helmet>
       <Layout>
-        <section className="py-12 md:py-20 bg-gradient-hero min-h-screen">
-          <div className="container mx-auto px-4">
+        <section className="pt-32 pb-20 md:pt-40 md:pb-24 bg-gradient-hero min-h-screen">
+          <div className="container mx-auto px-4 max-w-7xl">
             {/* Header */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               className="text-center mb-12"
             >
-              <h1 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-4">
-                Menu <span className="text-gradient">Kami</span>
+              <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-black text-white mb-4">
+                Daftar Menu <span className="text-gradient">Agang.id</span>
               </h1>
-              <p className="text-muted-foreground max-w-2xl mx-auto">
-                Pilih hidangan favoritmu dan pesan langsung via WhatsApp. Semua
-                menu dibuat fresh dengan bahan berkualitas!
+              <p className="text-white/80 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed">
+                Pilih hidangan favoritmu dan pesan langsung via WhatsApp. Semua hidangan disajikan hangat dengan bahan segar berkualitas!
               </p>
             </motion.div>
 

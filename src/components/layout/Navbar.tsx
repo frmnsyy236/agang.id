@@ -32,12 +32,11 @@ export const Navbar = () => {
     // 1. Hilangkan bg-background & border-b di nav utama agar transparan
     <nav className="fixed top-0 left-0 right-0 z-50 py-4 px-4 md:px-10">
       {/* 2. Container ini yang kita buat jadi warna putih melayang */}
-      <div className="mx-auto max-w-7xl bg-white text-slate-900 rounded-lg md:rounded-xl shadow-md border border-black-100">
+      <div className="mx-auto max-w-7xl bg-white text-slate-900 rounded-2xl shadow-lg border border-slate-200/80">
         <div className="container mx-auto px-6 md:px-10">
           <div className="flex items-center justify-between h-16 md:h-20">
             {/* Logo */}
             <Link to="/" className="flex items-center gap-2">
-              {/* Ganti text-gradient dengan warna solid gelap agar kontras di background putih */}
               <span className="font-display text-xl md:text-2xl font-extrabold text-red-600">Agang.id</span>
             </Link>
 
@@ -60,7 +59,11 @@ export const Navbar = () => {
 
             {/* CTA Button */}
             <div className="hidden md:block">
-              <Button variant="whatsapp" className="rounded-full px-6 bg-green-500 hover:bg-red-600 text-white" onClick={handleWhatsAppOrder}>
+              <Button
+                variant="whatsapp"
+                className="rounded-full px-6 bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-md hover:shadow-lg transition-all active:scale-95 hover:scale-105"
+                onClick={handleWhatsAppOrder}
+              >
                 Order Sekarang
               </Button>
             </div>
@@ -73,10 +76,10 @@ export const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Menu (Sama seperti sebelumnya, tapi sesuaikan warnanya) */}
+      {/* Mobile Menu */}
       <AnimatePresence>
         {isOpen && (
-          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="md:hidden mt-2 bg-white rounded-2xl shadow-xl border border-black-100 overflow-hidden">
+          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="md:hidden mt-2 bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
             <div className="px-6 py-6 space-y-4">
               {navLinks.map((link) => (
                 <Link
@@ -88,7 +91,11 @@ export const Navbar = () => {
                   {link.name}
                 </Link>
               ))}
-              <Button variant="whatsapp" className="w-full rounded-full" onClick={handleWhatsAppOrder}>
+              <Button
+                variant="whatsapp"
+                className="w-full rounded-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold"
+                onClick={handleWhatsAppOrder}
+              >
                 Order Sekarang
               </Button>
             </div>

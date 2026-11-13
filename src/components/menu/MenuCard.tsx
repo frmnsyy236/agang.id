@@ -26,10 +26,10 @@ export const MenuCard = ({ item, index }: MenuCardProps) => {
   };
 
   return (
-    <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.05 }} className="group">
-      <article className="bg-card rounded-2xl overflow-hidden border border-border transition-all duration-300 hover:shadow-xl hover:-translate-y-2 h-full flex flex-col">
+    <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.05 }} className="group h-full">
+      <article className="bg-[#580b0b] rounded-2xl overflow-hidden border border-white/15 transition-all duration-300 hover:shadow-2xl hover:border-amber-400/40 hover:-translate-y-2 h-full flex flex-col">
         {/* Image */}
-        <div className="relative aspect-square overflow-hidden">
+        <div className="relative aspect-square overflow-hidden bg-black/20">
           <img
             src={item.image}
             alt={`${item.name} - Kuliner Makassar Agang.id`}
@@ -42,13 +42,13 @@ export const MenuCard = ({ item, index }: MenuCardProps) => {
           {/* Badges */}
           <div className="absolute top-3 left-3 flex flex-col gap-2">
             {item.isPopular && (
-              <div className="bg-secondary text-secondary-foreground px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
+              <div className="bg-amber-400 text-red-950 px-3 py-1 rounded-full text-xs font-black flex items-center gap-1 shadow-md">
                 <Star size={12} fill="currentColor" />
                 Favorit
               </div>
             )}
             {item.isNew && (
-              <div className="bg-primary text-primary-foreground px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
+              <div className="bg-white text-red-950 px-3 py-1 rounded-full text-xs font-black flex items-center gap-1 shadow-md">
                 <Sparkles size={12} />
                 Baru
               </div>
@@ -59,15 +59,15 @@ export const MenuCard = ({ item, index }: MenuCardProps) => {
         {/* Content */}
         <div className="p-5 space-y-3 flex-1 flex flex-col">
           <div className="flex-1">
-            <h3 className="font-display text-lg font-semibold text-foreground mb-2 line-clamp-1">{item.name}</h3>
-            <p className="text-sm text-muted-foreground line-clamp-2">{item.description}</p>
+            <h3 className="font-display text-lg font-bold text-white mb-1.5 line-clamp-1">{item.name}</h3>
+            <p className="text-xs sm:text-sm text-white/75 line-clamp-2 leading-relaxed">{item.description}</p>
           </div>
-          <div className="flex items-center justify-between pt-2">
+          <div className="flex items-center justify-between pt-3 border-t border-white/10 mt-auto">
             <div className="rounded-lg">
-              <span className="font-bold text-white text-base md:text-lg">{displayPrice}</span>
+              <span className="font-black text-amber-300 text-base md:text-lg">{displayPrice}</span>
             </div>
 
-            <Button variant="hero" size="sm" onClick={handleOrder} className="font-bold">
+            <Button size="sm" onClick={handleOrder} className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-4 py-1.5 rounded-xl shadow-md transition-all active:scale-95">
               Pesan
             </Button>
           </div>

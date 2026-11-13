@@ -41,14 +41,14 @@ export const BrandStory = () => {
           {/* Content */}
           <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="space-y-6">
             <div className="space-y-4">
-              <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground">
+              <h2 className="font-display text-3xl md:text-4xl font-bold text-white">
                 Cerita di Balik <span className="text-gradient">Agang.id</span>
               </h2>
-              <p className="text-muted-foreground leading-relaxed">
+              <p className="text-white/85 text-sm sm:text-base leading-relaxed">
                 Di pinggir jalan, berdiri sebuah gerobak sederhana bernama Agang.id. Terlihat biasa, tapi menyimpan mimpi yang luar biasa. Setiap porsi yang disajikan bukan hanya tentang makanan, tapi tentang perjuangan, konsistensi, dan
                 harapan akan masa depan.
               </p>
-              <p className="text-muted-foreground leading-relaxed">
+              <p className="text-white/85 text-sm sm:text-base leading-relaxed">
                 Hari ini mungkin kecil, tapi Agang.id tidak dibangun untuk hari ini saja melainkan untuk sesuatu yang jauh lebih besar. Semua yang besar, selalu dimulai dari yang sederhana.
               </p>
             </div>
@@ -61,14 +61,14 @@ export const BrandStory = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.15 }}
-                  className="flex gap-4 p-4 rounded-xl bg-card border border-border hover:border-primary/30 transition-colors"
+                  className="flex gap-4 p-4 rounded-2xl bg-[#580b0b] border border-white/15 hover:border-amber-400/30 transition-colors"
                 >
-                  <div className="shrink-0 w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                  <div className="shrink-0 w-12 h-12 rounded-xl bg-amber-400/15 flex items-center justify-center text-amber-300">
                     <value.icon size={24} />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-foreground mb-1">{value.title}</h3>
-                    <p className="text-sm text-muted-foreground">{value.description}</p>
+                    <h3 className="font-bold text-white mb-1">{value.title}</h3>
+                    <p className="text-white/75 text-xs sm:text-sm leading-relaxed">{value.description}</p>
                   </div>
                 </motion.div>
               ))}
