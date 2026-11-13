@@ -29,10 +29,12 @@ export const HeroSection = () => {
             </motion.div>
 
             <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-foreground">
-              Nikmati Cita Rasa <span className="text-gradient">Istimewa</span> di Setiap Suapanmu
+              Kuliner Malam Makassar Favorit: <span className="text-gradient">Rice Bowl, Taiwan Chicken & Dimsum Goreng Renyah</span>
             </h1>
 
-            <p className="text-lg text-muted-foreground max-w-xl mx-auto lg:mx-0">Rice Bowl, Makanan Taiwan, dan Dimsum pilihan dengan bahan segar berkualitas. Pesan sekarang dan rasakan kelezatannya!</p>
+            <p className="text-lg text-muted-foreground max-w-xl mx-auto lg:mx-0">
+              Pilihan kuliner Makassar terenak di Inpres Maccini & Jl. Pongtiku (depan Bimbel JILC): Rice Bowl krispi sambel matah, Taiwan chicken gurih, kulit crispy renyah & dimsum keju lumer. Buka 17.30 - 23.30 WITA!
+            </p>
 
             <div className="flex flex-col sm:flex-row gap-6 justify-center lg:justify-start relative z-10 pointer-events-auto">
               {/* WhatsApp */}
@@ -76,7 +78,7 @@ export const HeroSection = () => {
               {/* Main Image Container */}
               <div className="absolute inset-0 rounded-full bg-gradient-warm opacity-20 blur-3xl animate-pulse-glow" />
               <motion.div animate={{ y: [0, -10, 0] }} transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }} className="relative z-10">
-                <img src={heroFood} alt="Makanan lezat dari Agang.id - Rice Bowl, Taiwan, Dimsum" className="w-full h-full object-cover rounded-3xl shadow-2xl" />
+                <img src={heroFood} alt="Kuliner Makassar Agang.id - Rice Bowl, Taiwan Chicken, Kulit Crispy dan Dimsum Goreng" className="w-full h-full object-cover rounded-3xl shadow-2xl" />
               </motion.div>
 
               {/* <motion.div animate={{ y: [0, -15, 0], rotate: [0, 5, 0] }} transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 4 }} className="absolute top-4 right-4 bg-card p-4 rounded-2xl shadow-lg z-20">

@@ -27,7 +27,7 @@ export const CTASection = () => {
               <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
             </Button>
           </div>
-          <p className="text-sm text-primary-foreground/70">Jam operasional: 17:00 - 23:30 WIB</p>
+          <p className="text-sm text-primary-foreground/80">Jam operasional: Minggu - Jumat 17:30 - 23:30 WITA | Sabtu 17:30 - 00:00 WITA</p>
         </motion.div>
       </div>
     </section>

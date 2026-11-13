@@ -5,12 +5,11 @@ import { menuItems, formatPrice } from '@/data/menuData';
 import { Link } from 'react-router-dom';
 
 export const FeaturedSection = () => {
-  // FIX: ambil 4 menu pertama sebagai menu favorit
-  const popularItems = menuItems.slice(0, 4);
+  // Ambil 5 menu flagship kuliner Makassar Agang.id
+  const popularItems = menuItems.slice(0, 5);
 
-  const handleOrderItem = (itemName: string, itemPrice: number) => {
-    const message = encodeURIComponent(`Halo Agang.id! Saya ingin memesan:\n\n${itemName} - ${formatPrice(itemPrice)}\n\nMohon konfirmasi ketersediaannya. Terima kasih!`);
-
+  const handleOrderItem = (itemName: string, itemPriceText: string) => {
+    const message = encodeURIComponent(`Halo Agang.id! Saya ingin memesan:\n\n*${itemName}* - ${itemPriceText}\n\nMohon konfirmasi ketersediaannya. Terima kasih!`);
     window.open(`https://wa.me/6287726993572?text=${message}`, '_blank');
   };
 
@@ -25,58 +24,65 @@ export const FeaturedSection = () => {
           </div>
 
           <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">
-            Menu <span className="text-gradient">Terlaris</span>
+            Menu Kuliner <span className="text-gradient">Terlaris Makassar</span>
           </h2>
 
-          <p className="text-muted-foreground max-w-2xl mx-auto">Pilihan favorit pelanggan kami yang wajib kamu coba</p>
+          <p className="text-muted-foreground max-w-2xl mx-auto">
+            Pilihan favorit kuliner malam Makassar: Rice Bowl krispi sambel matah, Taiwan chicken gurih, kulit crispy renyah & dimsum keju lumer.
+          </p>
         </motion.div>
 
-        {/* Menu Cards */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {popularItems.map((item, index) => (
-            <motion.div key={item.id} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.1 }} className="group">
-              <div className="bg-card rounded-2xl overflow-hidden border transition-all duration-300 hover:shadow-xl hover:-translate-y-2">
-                {/* Image */}
-                <div className="relative aspect-square overflow-hidden">
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    onError={(e) => {
-                      const fallbacks = [
-                        'https://images.unsplash.com/photo-1512058564366-18510be2db19?w=400&h=400&fit=crop',
-                        'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=400&h=400&fit=crop',
-                        'https://images.unsplash.com/photo-1563245372-f21724e3856d?w=400&h=400&fit=crop',
-                        'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?w=400&h=400&fit=crop',
-                      ];
-                      e.currentTarget.src = fallbacks[index % fallbacks.length];
-                    }}
-                  />
+        {/* Menu Cards (Semantic HTML <article>) */}
+        <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+          {popularItems.map((item, index) => {
+            const displayPrice = item.priceDisplay || formatPrice(item.price);
+            return (
+              <motion.div key={item.id} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.1 }} className="group h-full">
+                <article className="bg-card rounded-2xl overflow-hidden border transition-all duration-300 hover:shadow-xl hover:-translate-y-2 h-full flex flex-col">
+                  {/* Image */}
+                  <div className="relative aspect-square overflow-hidden">
+                    <img
+                      src={item.image}
+                      alt={`${item.name} - Kuliner Makassar Agang.id`}
+                      loading="lazy"
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      onError={(e) => {
+                        const fallbacks = [
+                          'https://images.unsplash.com/photo-1512058564366-18510be2db19?w=400&h=400&fit=crop',
+                          'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=400&h=400&fit=crop',
+                          'https://images.unsplash.com/photo-1563245372-f21724e3856d?w=400&h=400&fit=crop',
+                          'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?w=400&h=400&fit=crop',
+                        ];
+                        e.currentTarget.src = fallbacks[index % fallbacks.length];
+                      }}
+                    />
 
-                  {/* Badge */}
-                  <div className="absolute top-3 left-3 bg-secondary text-secondary-foreground px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
-                    <Star size={12} fill="currentColor" />
-                    Favorit
+                    {/* Badge */}
+                    <div className="absolute top-3 left-3 bg-secondary text-secondary-foreground px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
+                      <Star size={12} fill="currentColor" />
+                      Favorit
+                    </div>
                   </div>
-                </div>
 
-                {/* Content */}
-                <div className="p-4 space-y-3">
-                  <h3 className="font-semibold text-lg line-clamp-1">{item.name}</h3>
+                  {/* Content */}
+                  <div className="p-4 space-y-3 flex-1 flex flex-col justify-between">
+                    <div>
+                      <h3 className="font-semibold text-lg line-clamp-1">{item.name}</h3>
+                      <p className="text-sm text-muted-foreground line-clamp-2 mt-1">{item.description}</p>
+                    </div>
 
-                  <p className="text-sm text-muted-foreground line-clamp-2">{item.description}</p>
+                    <div className="flex items-center justify-between pt-2 mt-auto">
+                      <span className="font-bold text-white text-base md:text-lg">{displayPrice}</span>
 
-                  <div className="flex items-center justify-between pt-2">
-                    <span className="font-bold text-white text-lg md:text-xl">{formatPrice(item.price)}</span>
-
-                    <Button variant="hero" size="sm" onClick={() => handleOrderItem(item.name, item.price)}>
-                      Pesan
-                    </Button>
+                      <Button variant="hero" size="sm" onClick={() => handleOrderItem(item.name, displayPrice)}>
+                        Pesan
+                      </Button>
+                    </div>
                   </div>
-                </div>
-              </div>
-            </motion.div>
-          ))}
+                </article>
+              </motion.div>
+            );
+          })}
         </div>
 
         {/* Button */}

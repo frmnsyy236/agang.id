@@ -37,10 +37,10 @@ const Products = () => {
   return (
     <>
       <Helmet>
-        <title>Menu - Agang.id | Rice Bowl, Taiwan & Dimsum</title>
+        <title>Menu Kuliner Makassar - Agang.id | Rice Bowl, Taiwan Chicken & Dimsum</title>
         <meta
           name="description"
-          content="Jelajahi menu lengkap Agang.id - Rice Bowl, Makanan Taiwan, dan Dimsum premium dengan harga terjangkau."
+          content="Daftar menu lengkap Agang.id Makassar: Rice Bowl Sambel Matah, Rice Bowl Cheese, Taiwan Chicken Crispy, Kulit Crispy & Dimsum Goreng Keju Lumer. Pesan via WhatsApp!"
         />
       </Helmet>
       <Layout>

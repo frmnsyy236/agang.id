@@ -9,8 +9,10 @@ interface MenuCardProps {
 }
 
 export const MenuCard = ({ item, index }: MenuCardProps) => {
+  const displayPrice = item.priceDisplay || formatPrice(item.price);
+
   const handleOrder = () => {
-    const message = encodeURIComponent(`Halo Agang.id! Saya ingin memesan:\n\n*${item.name}*\nHarga: ${formatPrice(item.price)}\n\nMohon konfirmasi ketersediaannya. Terima kasih!`);
+    const message = encodeURIComponent(`Halo Agang.id! Saya ingin memesan:\n\n*${item.name}*\nHarga: ${displayPrice}\n\nMohon konfirmasi ketersediaannya. Terima kasih!`);
     window.open(`https://wa.me/6287726993572?text=${message}`, '_blank');
   };
 
@@ -25,18 +27,19 @@ export const MenuCard = ({ item, index }: MenuCardProps) => {
 
   return (
     <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.05 }} className="group">
-      <div className="bg-card rounded-2xl overflow-hidden border border-border transition-all duration-300 hover:shadow-xl hover:-translate-y-2 h-full flex flex-col">
+      <article className="bg-card rounded-2xl overflow-hidden border border-border transition-all duration-300 hover:shadow-xl hover:-translate-y-2 h-full flex flex-col">
         {/* Image */}
         <div className="relative aspect-square overflow-hidden">
           <img
             src={item.image}
-            alt={item.name}
+            alt={`${item.name} - Kuliner Makassar Agang.id`}
+            loading="lazy"
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
             onError={(e) => {
               e.currentTarget.src = getFallbackImage();
             }}
           />
-          Badges
+          {/* Badges */}
           <div className="absolute top-3 left-3 flex flex-col gap-2">
             {item.isPopular && (
               <div className="bg-secondary text-secondary-foreground px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
@@ -60,9 +63,8 @@ export const MenuCard = ({ item, index }: MenuCardProps) => {
             <p className="text-sm text-muted-foreground line-clamp-2">{item.description}</p>
           </div>
           <div className="flex items-center justify-between pt-2">
-            {/* Harga dibuat putih dengan background merah agar kontras */}
             <div className="rounded-lg">
-              <span className="font-bold text-white text-lg md:text-xl">{formatPrice(item.price)}</span>
+              <span className="font-bold text-white text-base md:text-lg">{displayPrice}</span>
             </div>
 
             <Button variant="hero" size="sm" onClick={handleOrder} className="font-bold">
@@ -70,7 +72,7 @@ export const MenuCard = ({ item, index }: MenuCardProps) => {
             </Button>
           </div>
         </div>
-      </div>
+      </article>
     </motion.div>
   );
 };
