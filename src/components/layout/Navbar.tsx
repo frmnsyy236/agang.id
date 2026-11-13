@@ -1,15 +1,16 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const navLinks = [
-  { name: 'Home', path: '/' },
-  { name: 'Products', path: '/products' },
-  { name: 'Promo', path: '/promo' },
-  { name: 'About Us', path: '/about' },
-  { name: 'Blog', path: '/blog' },
+  { name: 'HOME', path: '/' },
+  { name: 'MENU', path: '/products' },
+  { name: 'PROMO', path: '/promo' },
+  { name: 'TENTANG KAMI', path: '/about' },
+  { name: 'BLOG', path: '/blog' },
+  { name: 'OUTLET', path: '/#outlet' },
 ];
 
 export const Navbar = () => {
@@ -18,8 +19,9 @@ export const Navbar = () => {
 
   const isActive = (path: string) => {
     if (path === '/') return location.pathname === '/';
-    if (path === '/blog') return location.pathname === '/blog' || location.pathname === '/BlogPost' || location.pathname.startsWith('/blog/');
+    if (path === '/blog') return location.pathname.startsWith('/blog') || location.pathname === '/BlogPost';
     if (path === '/products') return location.pathname.toLowerCase().startsWith('/product') || location.pathname === '/menu';
+    if (path.startsWith('/#')) return false;
     return location.pathname.startsWith(path);
   };
 
@@ -29,75 +31,104 @@ export const Navbar = () => {
   };
 
   return (
-    // 1. Hilangkan bg-background & border-b di nav utama agar transparan
-    <nav className="fixed top-0 left-0 right-0 z-50 py-4 px-4 md:px-10">
-      {/* 2. Container ini yang kita buat jadi warna putih melayang */}
-      <div className="mx-auto max-w-7xl bg-white text-slate-900 rounded-2xl shadow-lg border border-slate-200/80">
-        <div className="container mx-auto px-6 md:px-10">
-          <div className="flex items-center justify-between h-16 md:h-20">
-            {/* Logo */}
-            <Link to="/" className="flex items-center gap-2">
-              <span className="font-display text-xl md:text-2xl font-extrabold text-red-600">Agang.id</span>
-            </Link>
-
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center gap-8">
-              {navLinks.map((link) => {
-                const active = isActive(link.path);
-                return (
-                  <Link
-                    key={link.path}
-                    to={link.path}
-                    className={`relative font-semibold text-sm transition-colors duration-300 ${active ? 'text-red-600' : 'text-slate-600 hover:text-red-500'}`}
-                  >
-                    {link.name}
-                    {active && <motion.div layoutId="activeNav" className="absolute -bottom-1 left-0 right-0 h-0.5 bg-red-600 rounded-full" />}
-                  </Link>
-                );
-              })}
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-sm transition-all duration-300">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+        <div className="flex items-center justify-between h-20">
+          {/* Logo */}
+          <Link to="/" className="flex items-center gap-2 group">
+            <span className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#c1002d] to-[#9c0f12] text-white font-black flex items-center justify-center text-lg shadow-md group-hover:scale-105 transition-transform">
+              A
+            </span>
+            <div className="flex flex-col">
+              <span className="font-display text-2xl font-black tracking-tight text-[#111827]">
+                Agang<span className="text-[#c1002d]">.id</span>
+              </span>
+              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest -mt-1">
+                Kuliner Makassar
+              </span>
             </div>
+          </Link>
 
-            {/* CTA Button */}
-            <div className="hidden md:block">
-              <Button
-                variant="whatsapp"
-                className="rounded-full px-6 bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-md hover:shadow-lg transition-all active:scale-95 hover:scale-105"
-                onClick={handleWhatsAppOrder}
-              >
-                Order Sekarang
-              </Button>
-            </div>
-
-            {/* Mobile Menu Button */}
-            <button className="md:hidden p-2 text-slate-800" onClick={() => setIsOpen(!isOpen)}>
-              {isOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
+          {/* Desktop Navigation */}
+          <div className="hidden lg:flex items-center gap-7">
+            {navLinks.map((link) => {
+              const active = isActive(link.path);
+              return (
+                <Link
+                  key={link.name}
+                  to={link.path}
+                  className={`text-xs font-extrabold uppercase tracking-wider transition-colors duration-200 py-1 relative ${
+                    active ? 'text-[#c1002d]' : 'text-slate-700 hover:text-[#c1002d]'
+                  }`}
+                >
+                  {link.name}
+                  {active && (
+                    <motion.div
+                      layoutId="activeNav"
+                      className="absolute -bottom-1 left-0 right-0 h-0.5 bg-[#c1002d] rounded-full"
+                    />
+                  )}
+                </Link>
+              );
+            })}
           </div>
+
+          {/* Right Action Bar */}
+          <div className="hidden sm:flex items-center gap-3">
+            <Button
+              onClick={handleWhatsAppOrder}
+              className="rounded-full px-6 py-2.5 bg-[#c1002d] hover:bg-[#9c0f12] text-white font-extrabold text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition-all active:scale-95 flex items-center gap-2"
+            >
+              <MessageCircle size={16} />
+              <span>Order Sekarang</span>
+            </Button>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            type="button"
+            className="lg:hidden p-2 text-slate-800 rounded-xl hover:bg-slate-100 transition-colors"
+            onClick={() => setIsOpen(!isOpen)}
+            aria-label="Toggle navigation menu"
+          >
+            {isOpen ? <X size={26} /> : <Menu size={26} />}
+          </button>
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Drawer Menu */}
       <AnimatePresence>
         {isOpen && (
-          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="md:hidden mt-2 bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
-            <div className="px-6 py-6 space-y-4">
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="lg:hidden bg-white border-b border-slate-200 shadow-xl overflow-hidden"
+          >
+            <div className="container mx-auto px-6 py-6 space-y-4">
               {navLinks.map((link) => (
                 <Link
-                  key={link.path}
+                  key={link.name}
                   to={link.path}
                   onClick={() => setIsOpen(false)}
-                  className={`block font-semibold ${isActive(link.path) ? 'text-red-600' : 'text-slate-700'}`}
+                  className={`block py-2 text-sm font-extrabold uppercase tracking-wider border-b border-slate-100 ${
+                    isActive(link.path) ? 'text-[#c1002d]' : 'text-slate-800'
+                  }`}
                 >
                   {link.name}
                 </Link>
               ))}
-              <Button
-                variant="whatsapp"
-                className="w-full rounded-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold"
-                onClick={handleWhatsAppOrder}
-              >
-                Order Sekarang
-              </Button>
+              <div className="pt-2">
+                <Button
+                  onClick={() => {
+                    setIsOpen(false);
+                    handleWhatsAppOrder();
+                  }}
+                  className="w-full rounded-full py-3 bg-[#c1002d] hover:bg-[#9c0f12] text-white font-extrabold text-sm uppercase tracking-wider shadow-md"
+                >
+                  Order via WhatsApp
+                </Button>
+              </div>
             </div>
           </motion.div>
         )}

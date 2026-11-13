@@ -14,19 +14,26 @@ const About = () => {
   return (
     <>
       <Helmet>
-        <title>Products - Agang.id | Kuliner Asia Autentik</title>
-        <meta name="description" content="Kenali lebih dekat Agang.id - bisnis kuliner online yang menyajikan Rice Bowl, Makanan Taiwan, dan Dimsum premium." />
+        <title>Tentang Kami - Agang.id | Kuliner Makassar</title>
+        <meta name="description" content="Kenali lebih dekat Agang.id - bisnis kuliner Makassar yang menyajikan Rice Bowl, Makanan Taiwan, dan Dimsum premium." />
       </Helmet>
       <Layout>
         {/* Hero */}
-        <section className="py-12 md:py-20 bg-gradient-hero">
-          <div className="container mx-auto px-4">
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center max-w-3xl mx-auto">
-              <h1 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-6">
-                Tentang <span className="text-gradient">Agang.id</span>
+        <section className="pt-28 pb-16 md:pt-36 md:pb-24 bg-gradient-hero border-b border-slate-200">
+          <div className="container mx-auto px-4 max-w-4xl">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center">
+              {/* 3 Strips Motif */}
+              <div className="flex items-center justify-center gap-1.5 mb-2">
+                <span className="w-1.5 h-6 bg-[#eb7300] rounded-full" />
+                <span className="w-1.5 h-6 bg-[#c1002d] rounded-full" />
+                <span className="w-1.5 h-6 bg-[#eb7300] rounded-full" />
+              </div>
+
+              <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight text-slate-900 mb-4">
+                Tentang <span className="text-[#c1002d]">Agang.id</span>
               </h1>
-              <p className="text-lg text-muted-foreground leading-relaxed">
-                Kami adalah bisnis kuliner online yang berdedikasi membawa kelezatan autentik Asia langsung ke meja makanmu. Dengan passion dalam memasak dan komitmen terhadap kualitas, setiap hidangan adalah karya yang penuh cinta.
+              <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-2xl mx-auto">
+                Kami adalah brand kuliner lokal Makassar yang berdedikasi membawa kelezatan autentik ayam krispi sambal matah, saus keju gurih, dan aneka jajanan lezat langsung ke meja makan Anda.
               </p>
             </motion.div>
           </div>
@@ -78,37 +85,37 @@ const About = () => {
                       <MapPin size={24} />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-foreground mb-1">Lokasi</h3>
-                      <p className="text-muted-foreground text-sm">Jl. Kerung kerung</p>
+                      <h3 className="font-semibold text-slate-900 mb-1">Lokasi Outlet</h3>
+                      <p className="text-slate-600 text-sm">Jl. Pongtiku (Depan JILC) & Area SD Inpres Maccini, Kota Makassar</p>
                     </div>
                   </div>
 
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                    <div className="w-12 h-12 rounded-xl bg-green-50 flex items-center justify-center text-green-600 shrink-0">
                       <Phone size={24} />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-foreground mb-1">WhatsApp</h3>
-                      <p className="text-muted-foreground text-sm">+62 877-2699-3572</p>
+                      <h3 className="font-semibold text-slate-900 mb-1">WhatsApp Pemesanan</h3>
+                      <p className="text-slate-600 text-sm">+62 877-2699-3572</p>
                     </div>
                   </div>
 
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                    <div className="w-12 h-12 rounded-xl bg-orange-50 flex items-center justify-center text-[#eb7300] shrink-0">
                       <Clock size={24} />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-foreground mb-1">Jam Operasional</h3>
-                      <p className="text-muted-foreground text-sm">Setiap hari, 17:00 - 23:30 WIB</p>
+                      <h3 className="font-semibold text-slate-900 mb-1">Jam Operasional</h3>
+                      <p className="text-slate-600 text-sm">Minggu - Jumat: 17:30 - 23:30 WITA | Sabtu: 17:30 - 00:00 WITA</p>
                     </div>
                   </div>
 
                   <div className="flex gap-3 pt-4">
-                    <Button variant="whatsapp" className="flex-1" onClick={handleWhatsApp}>
+                    <Button className="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-full" onClick={handleWhatsApp}>
                       <MessageCircle size={18} />
                       WhatsApp
                     </Button>
-                    <Button variant="outline" className="flex-1" onClick={() => window.open('https://instagram.com/agang.id', '_blank')}>
+                    <Button variant="outline" className="flex-1 rounded-full border-slate-300 text-slate-800 hover:border-[#c1002d] hover:text-[#c1002d]" onClick={() => window.open('https://instagram.com/agang.id', '_blank')}>
                       <Instagram size={18} />
                       Instagram
                     </Button>

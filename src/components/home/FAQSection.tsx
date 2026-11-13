@@ -42,45 +42,47 @@ export const faqs = [
 
 export const FAQSection = () => {
   return (
-    <section id="faq" className="py-16 md:py-24 bg-background border-t border-border/40">
+    <section id="faq" className="py-16 md:py-24 bg-white border-b border-slate-200/80">
       <div className="container mx-auto px-4 max-w-4xl">
+        {/* 3 Strips Motif */}
+        <div className="flex items-center justify-center gap-1.5 mb-2.5">
+          <span className="w-1.5 h-6 bg-[#eb7300] rounded-full" />
+          <span className="w-1.5 h-6 bg-[#c1002d] rounded-full" />
+          <span className="w-1.5 h-6 bg-[#eb7300] rounded-full" />
+        </div>
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-12"
+          className="text-center mb-12 space-y-2"
         >
-          <div className="inline-flex items-center gap-2 bg-amber-400/20 text-amber-300 border border-amber-400/30 px-4 py-1.5 rounded-full text-xs font-bold mb-4 shadow-sm">
-            <HelpCircle size={15} className="text-amber-400" />
-            <span>Tanya Jawab (FAQ)</span>
-          </div>
-
-          <h2 className="font-display text-3xl md:text-4xl font-bold mb-4 text-white">
-            Pertanyaan Seputar <span className="text-gradient">Kuliner Makassar Agang.id</span>
+          <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-black uppercase tracking-tight text-slate-900">
+            PERTANYAAN SEPUTAR <span className="text-[#c1002d]">AGANG.ID</span>
           </h2>
 
-          <p className="text-white/80 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed">
-            Temukan jawaban lengkap seputar lokasi outlet, jam buka malam, menu favorit, hingga layanan pesanan via WhatsApp.
+          <p className="text-sm sm:text-base text-slate-600 max-w-2xl mx-auto">
+            Temukan jawaban lengkap seputar lokasi outlet Makassar, jam buka malam, menu favorit, hingga layanan pesanan via WhatsApp.
           </p>
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 25 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="bg-[#580b0b] rounded-3xl border border-white/15 p-6 md:p-8 shadow-2xl"
+          className="bg-[#f8f9fa] rounded-3xl border border-slate-200 p-6 md:p-8 shadow-sm"
         >
-          <Accordion type="single" collapsible defaultValue="faq-1" className="w-full space-y-4">
+          <Accordion type="single" collapsible defaultValue="faq-1" className="w-full space-y-3.5">
             {faqs.map((faq) => (
               <AccordionItem
                 key={faq.id}
                 value={faq.id}
-                className="border border-white/15 rounded-2xl px-4 md:px-6 transition-colors hover:border-amber-400/40 bg-white/5"
+                className="border border-slate-200 rounded-2xl px-5 sm:px-6 transition-all duration-200 hover:border-[#c1002d]/40 bg-white shadow-sm"
               >
-                <AccordionTrigger className="text-left font-display text-base md:text-lg font-bold text-white py-4 hover:no-underline">
+                <AccordionTrigger className="text-left font-bold text-sm sm:text-base text-slate-900 py-4 hover:no-underline hover:text-[#c1002d] transition-colors">
                   {faq.question}
                 </AccordionTrigger>
-                <AccordionContent className="text-sm md:text-base text-white/80 leading-relaxed pt-1 pb-4">
+                <AccordionContent className="text-xs sm:text-sm text-slate-600 leading-relaxed pt-1 pb-5 border-t border-slate-100">
                   {faq.answer}
                 </AccordionContent>
               </AccordionItem>

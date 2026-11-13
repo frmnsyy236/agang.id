@@ -1,12 +1,17 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Star, Flame } from 'lucide-react';
+import { Star, MessageCircle, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { menuItems, formatPrice } from '@/data/menuData';
 import { Link } from 'react-router-dom';
 
 export const FeaturedSection = () => {
-  // Ambil 5 menu flagship kuliner Makassar Agang.id
-  const popularItems = menuItems.slice(0, 5);
+  const [activeTab, setActiveTab] = useState<'all' | 'ricebowl' | 'taiwan' | 'dimsum'>('all');
+
+  const filteredItems =
+    activeTab === 'all'
+      ? menuItems.slice(0, 8)
+      : menuItems.filter((item) => item.category === activeTab);
 
   const handleOrderItem = (itemName: string, itemPriceText: string) => {
     const message = encodeURIComponent(`Halo Agang.id! Saya ingin memesan:\n\n*${itemName}* - ${itemPriceText}\n\nMohon konfirmasi ketersediaannya. Terima kasih!`);
@@ -14,72 +19,106 @@ export const FeaturedSection = () => {
   };
 
   return (
-    <section className="py-16 md:py-24 bg-[#4a0808]/60 border-t border-white/10">
+    <section className="py-16 md:py-24 bg-[#f8f9fa] border-b border-slate-200/80">
       <div className="container mx-auto px-4 max-w-7xl">
-        {/* Header */}
-        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 bg-amber-400/20 text-amber-300 border border-amber-400/30 px-4 py-1.5 rounded-full text-xs font-bold mb-4 shadow-sm">
-            <Flame size={15} className="text-amber-400" />
-            <span>Paling Favorit</span>
-          </div>
+        {/* Lazuna-style 3 Vertical Strips Divider Motif */}
+        <div className="flex items-center justify-center gap-1.5 mb-2.5">
+          <span className="w-1.5 h-6 bg-[#eb7300] rounded-full" />
+          <span className="w-1.5 h-6 bg-[#c1002d] rounded-full" />
+          <span className="w-1.5 h-6 bg-[#eb7300] rounded-full" />
+        </div>
 
-          <h2 className="font-display text-3xl md:text-4xl font-bold mb-4 text-white">
-            Menu Kuliner <span className="text-gradient">Terlaris Makassar</span>
+        {/* Section Header */}
+        <div className="text-center mb-10 space-y-2">
+          <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-black uppercase tracking-tight text-slate-900">
+            MENU TERLARIS <span className="text-[#c1002d]">AGANG.ID</span>
           </h2>
-
-          <p className="text-white/80 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed">
-            Pilihan favorit kuliner malam Makassar: Rice Bowl krispi sambel matah, Taiwan chicken gurih, kulit crispy renyah & dimsum keju lumer.
+          <p className="text-sm sm:text-base text-slate-600 max-w-2xl mx-auto">
+            Pilihan kuliner favorit malam Makassar: Rice Bowl renyah sambel matah, Taiwan chicken aneka rasa & dimsum keju lumer.
           </p>
-        </motion.div>
+        </div>
 
-        {/* Menu Cards (Semantic HTML <article>) */}
-        <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-          {popularItems.map((item, index) => {
+        {/* Category Filter Pills (Model Lazuna Chicken) */}
+        <div className="flex flex-wrap items-center justify-center gap-2.5 mb-10">
+          {[
+            { id: 'all', label: 'SEMUA MENU' },
+            { id: 'ricebowl', label: 'RICE BOWL MAKASSAR' },
+            { id: 'taiwan', label: 'TAIWAN CHICKEN' },
+            { id: 'dimsum', label: 'DIMSUM GORENG' },
+          ].map((cat) => (
+            <button
+              key={cat.id}
+              type="button"
+              onClick={() => setActiveTab(cat.id as any)}
+              className={`px-5 py-2 rounded-full text-xs font-black uppercase tracking-wider transition-all duration-200 ${
+                activeTab === cat.id
+                  ? 'bg-[#c1002d] text-white shadow-md scale-105'
+                  : 'bg-white border border-slate-300 text-slate-700 hover:border-[#c1002d] hover:text-[#c1002d]'
+              }`}
+            >
+              {cat.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Product Cards Grid (Model Lazuna Chicken Product Card) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {filteredItems.map((item, index) => {
             const displayPrice = item.priceDisplay || formatPrice(item.price);
             return (
-              <motion.div key={item.id} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.1 }} className="group h-full">
-                <article className="bg-[#580b0b] rounded-2xl overflow-hidden border border-white/15 transition-all duration-300 hover:shadow-2xl hover:border-amber-400/40 hover:-translate-y-2 h-full flex flex-col">
-                  {/* Image */}
-                  <div className="relative aspect-square overflow-hidden bg-black/20">
+              <motion.div
+                key={item.id}
+                initial={{ opacity: 0, y: 25 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.05 }}
+                className="group h-full"
+              >
+                <article className="bg-white rounded-2xl overflow-hidden border border-slate-200/90 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 h-full flex flex-col justify-between">
+                  {/* Food Image */}
+                  <div className="relative aspect-[4/3] overflow-hidden bg-slate-100">
                     <img
                       src={item.image}
                       alt={`${item.name} - Kuliner Makassar Agang.id`}
                       loading="lazy"
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                      onError={(e) => {
-                        const fallbacks = [
-                          'https://images.unsplash.com/photo-1512058564366-18510be2db19?w=400&h=400&fit=crop',
-                          'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=400&h=400&fit=crop',
-                          'https://images.unsplash.com/photo-1563245372-f21724e3856d?w=400&h=400&fit=crop',
-                          'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?w=400&h=400&fit=crop',
-                        ];
-                        e.currentTarget.src = fallbacks[index % fallbacks.length];
-                      }}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
 
                     {/* Badge */}
-                    <div className="absolute top-3 left-3 bg-amber-400 text-red-950 px-3 py-1 rounded-full text-xs font-black flex items-center gap-1 shadow-md">
-                      <Star size={12} fill="currentColor" />
-                      Favorit
-                    </div>
+                    {item.isPopular && (
+                      <div className="absolute top-3 left-3 bg-[#c1002d] text-white px-3 py-1 rounded-full text-[11px] font-black uppercase tracking-wider flex items-center gap-1 shadow-md">
+                        <Star size={11} fill="currentColor" />
+                        <span>Best Seller</span>
+                      </div>
+                    )}
                   </div>
 
-                  {/* Content */}
-                  <div className="p-4 space-y-3 flex-1 flex flex-col justify-between">
+                  {/* Card Body */}
+                  <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
                     <div>
-                      <h3 className="font-bold text-base md:text-lg text-white line-clamp-1">{item.name}</h3>
-                      <p className="text-xs text-white/75 line-clamp-2 mt-1 leading-relaxed">{item.description}</p>
+                      <h3 className="font-bold text-base sm:text-lg text-slate-900 group-hover:text-[#c1002d] transition-colors line-clamp-1">
+                        {item.name}
+                      </h3>
+                      <p className="text-xs text-slate-500 line-clamp-2 mt-1.5 leading-relaxed">
+                        {item.description}
+                      </p>
                     </div>
 
-                    <div className="flex items-center justify-between pt-3 mt-auto border-t border-white/10">
-                      <span className="font-black text-amber-300 text-sm sm:text-base">{displayPrice}</span>
+                    <div className="pt-3 border-t border-slate-100 flex items-center justify-between mt-auto">
+                      <div>
+                        <span className="block text-[10px] font-bold text-slate-400 uppercase">Harga</span>
+                        <span className="font-display text-base sm:text-lg font-black text-[#c1002d]">
+                          {displayPrice}
+                        </span>
+                      </div>
 
                       <Button
                         size="sm"
                         onClick={() => handleOrderItem(item.name, displayPrice)}
-                        className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-3.5 py-1.5 rounded-xl shadow-md transition-all active:scale-95"
+                        className="bg-[#c1002d] hover:bg-[#9c0f12] text-white font-extrabold text-xs uppercase px-4 py-2 rounded-full shadow-sm hover:shadow-md transition-all active:scale-95 flex items-center gap-1.5"
                       >
-                        Pesan
+                        <MessageCircle size={14} />
+                        <span>Pesan</span>
                       </Button>
                     </div>
                   </div>
@@ -89,16 +128,19 @@ export const FeaturedSection = () => {
           })}
         </div>
 
-        {/* Button */}
-        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mt-12">
+        {/* View All Menu CTA */}
+        <div className="text-center mt-12">
           <Button
             size="lg"
             asChild
-            className="bg-white hover:bg-neutral-100 text-red-950 font-black px-8 py-3.5 rounded-2xl shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 transition-all border border-white/20"
+            className="rounded-full px-8 py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-black text-xs uppercase tracking-wider shadow-lg hover:shadow-xl transition-all"
           >
-            <Link to="/products">Lihat Semua Menu Lengkap</Link>
+            <Link to="/products" className="inline-flex items-center gap-2">
+              <span>Buka Seluruh Menu Lengkap</span>
+              <ArrowRight size={16} />
+            </Link>
           </Button>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Star, Sparkles } from 'lucide-react';
+import { Star, MessageCircle, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { MenuItem, formatPrice } from '@/data/menuData';
 
@@ -26,49 +26,68 @@ export const MenuCard = ({ item, index }: MenuCardProps) => {
   };
 
   return (
-    <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.05 }} className="group h-full">
-      <article className="bg-[#580b0b] rounded-2xl overflow-hidden border border-white/15 transition-all duration-300 hover:shadow-2xl hover:border-amber-400/40 hover:-translate-y-2 h-full flex flex-col">
-        {/* Image */}
-        <div className="relative aspect-square overflow-hidden bg-black/20">
+    <motion.div
+      initial={{ opacity: 0, y: 25 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.04 }}
+      className="group h-full"
+    >
+      <article className="bg-white rounded-2xl overflow-hidden border border-slate-200/90 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 h-full flex flex-col justify-between">
+        {/* Image Container */}
+        <div className="relative aspect-[4/3] overflow-hidden bg-slate-100">
           <img
             src={item.image}
             alt={`${item.name} - Kuliner Makassar Agang.id`}
             loading="lazy"
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
             onError={(e) => {
               e.currentTarget.src = getFallbackImage();
             }}
           />
+
           {/* Badges */}
-          <div className="absolute top-3 left-3 flex flex-col gap-2">
+          <div className="absolute top-3 left-3 flex flex-col gap-1.5">
             {item.isPopular && (
-              <div className="bg-amber-400 text-red-950 px-3 py-1 rounded-full text-xs font-black flex items-center gap-1 shadow-md">
-                <Star size={12} fill="currentColor" />
-                Favorit
+              <div className="bg-[#c1002d] text-white px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider flex items-center gap-1 shadow-md">
+                <Star size={10} fill="currentColor" />
+                <span>Favorit</span>
               </div>
             )}
             {item.isNew && (
-              <div className="bg-white text-red-950 px-3 py-1 rounded-full text-xs font-black flex items-center gap-1 shadow-md">
-                <Sparkles size={12} />
-                Baru
+              <div className="bg-[#eb7300] text-white px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider flex items-center gap-1 shadow-md">
+                <Sparkles size={10} />
+                <span>Baru</span>
               </div>
             )}
           </div>
         </div>
 
-        {/* Content */}
-        <div className="p-5 space-y-3 flex-1 flex flex-col">
-          <div className="flex-1">
-            <h3 className="font-display text-lg font-bold text-white mb-1.5 line-clamp-1">{item.name}</h3>
-            <p className="text-xs sm:text-sm text-white/75 line-clamp-2 leading-relaxed">{item.description}</p>
+        {/* Card Content */}
+        <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
+          <div>
+            <h3 className="font-bold text-base sm:text-lg text-slate-900 group-hover:text-[#c1002d] transition-colors line-clamp-1">
+              {item.name}
+            </h3>
+            <p className="text-xs text-slate-500 line-clamp-2 mt-1.5 leading-relaxed">
+              {item.description}
+            </p>
           </div>
-          <div className="flex items-center justify-between pt-3 border-t border-white/10 mt-auto">
-            <div className="rounded-lg">
-              <span className="font-black text-amber-300 text-base md:text-lg">{displayPrice}</span>
+
+          <div className="pt-3 border-t border-slate-100 flex items-center justify-between mt-auto">
+            <div>
+              <span className="block text-[10px] font-bold text-slate-400 uppercase">Harga</span>
+              <span className="font-display text-base sm:text-lg font-black text-[#c1002d]">
+                {displayPrice}
+              </span>
             </div>
 
-            <Button size="sm" onClick={handleOrder} className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-4 py-1.5 rounded-xl shadow-md transition-all active:scale-95">
-              Pesan
+            <Button
+              size="sm"
+              onClick={handleOrder}
+              className="bg-[#c1002d] hover:bg-[#9c0f12] text-white font-extrabold text-xs uppercase px-4 py-2 rounded-full shadow-sm hover:shadow-md transition-all active:scale-95 flex items-center gap-1.5"
+            >
+              <MessageCircle size={14} />
+              <span>Pesan</span>
             </Button>
           </div>
         </div>
