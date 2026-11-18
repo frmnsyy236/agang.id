@@ -37,33 +37,27 @@ const Products = () => {
   return (
     <>
       <Helmet>
-        <title>Menu Kuliner Makassar - Agang.id | Rice Bowl, Taiwan Chicken & Dimsum</title>
+        <title>Menu - Agang.id | Rice Bowl, Taiwan & Dimsum</title>
         <meta
           name="description"
-          content="Daftar menu lengkap Agang.id Makassar: Rice Bowl Sambel Matah, Rice Bowl Cheese, Taiwan Chicken Crispy, Kulit Crispy & Dimsum Goreng Keju Lumer. Pesan via WhatsApp!"
+          content="Jelajahi menu lengkap Agang.id - Rice Bowl, Makanan Taiwan, dan Dimsum premium dengan harga terjangkau."
         />
       </Helmet>
       <Layout>
-        <section className="pt-28 pb-20 md:pt-36 md:pb-24 bg-[#f8f9fa] min-h-screen border-b border-slate-200">
-          <div className="container mx-auto px-4 max-w-7xl">
+        <section className="py-12 md:py-20 bg-gradient-hero min-h-screen">
+          <div className="container mx-auto px-4">
             {/* Header */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-center mb-10 space-y-2"
+              className="text-center mb-12"
             >
-              {/* 3 Strips Motif */}
-              <div className="flex items-center justify-center gap-1.5 mb-2">
-                <span className="w-1.5 h-6 bg-[#eb7300] rounded-full" />
-                <span className="w-1.5 h-6 bg-[#c1002d] rounded-full" />
-                <span className="w-1.5 h-6 bg-[#eb7300] rounded-full" />
-              </div>
-
-              <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight text-slate-900">
-                DAFTAR MENU <span className="text-[#c1002d]">AGANG.ID</span>
+              <h1 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-4">
+                Menu <span className="text-gradient">Kami</span>
               </h1>
-              <p className="text-slate-600 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed">
-                Pilih hidangan favoritmu dan pesan langsung via WhatsApp. Semua hidangan disajikan fresh dan hangat dengan bahan pilihan!
+              <p className="text-muted-foreground max-w-2xl mx-auto">
+                Pilih hidangan favoritmu dan pesan langsung via WhatsApp. Semua
+                menu dibuat fresh dengan bahan berkualitas!
               </p>
             </motion.div>
 
@@ -81,16 +75,16 @@ const Products = () => {
             </motion.div>
 
             {/* Menu Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {filteredItems.map((item, index) => (
                 <MenuCard key={item.id} item={item} index={index} />
               ))}
             </div>
 
             {filteredItems.length === 0 && (
-              <div className="text-center py-20 bg-white rounded-3xl border border-slate-200 p-8">
-                <p className="text-slate-500 text-base font-semibold">
-                  Tidak ada menu yang ditemukan untuk kategori ini.
+              <div className="text-center py-20">
+                <p className="text-muted-foreground text-lg">
+                  Tidak ada menu yang ditemukan.
                 </p>
               </div>
             )}

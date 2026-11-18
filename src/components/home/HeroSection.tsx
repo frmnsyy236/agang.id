@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { ArrowRight, Flame, Clock, MapPin, CheckCircle2 } from 'lucide-react';
+import { ArrowRight, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import heroFood from '@/assets/chicken chesee.jpg';
@@ -11,136 +11,82 @@ export const HeroSection = () => {
   };
 
   return (
-    <section className="relative pt-28 pb-16 md:pt-36 md:pb-24 bg-gradient-to-b from-white via-[#fff5f5] to-white overflow-hidden border-b border-slate-100">
-      {/* Decorative Warm Blurred Background Circles */}
-      <div className="absolute top-10 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-red-100/60 rounded-full blur-3xl pointer-events-none -z-10" />
+    <section className="relative min-h-[90vh] flex items-center bg-gradient-hero overflow-hidden">
+      {/* Background Pattern */}
+      {/* <div className="absolute inset-0 opacity-5">
+        <div className="absolute top-20 left-10 text-8xl">🍜</div>
+        <div className="absolute top-40 right-20 text-6xl">🥟</div>
+        <div className="absolute bottom-32 left-1/4 text-7xl">🍚</div>
+        <div className="absolute bottom-20 right-10 text-5xl">🥢</div>
+      </div> */}
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-        <div className="grid lg:grid-cols-12 gap-10 lg:gap-12 items-center">
-          {/* Content Column (7 cols) */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.7 }}
-            className="lg:col-span-7 text-center lg:text-left space-y-6"
-          >
-            {/* Pill Tag */}
-            <div className="inline-flex items-center gap-2 bg-red-50 text-[#c1002d] border border-red-200/80 px-4 py-1.5 rounded-full text-xs sm:text-sm font-extrabold uppercase tracking-wider shadow-sm">
-              <Flame size={15} className="text-[#c1002d]" />
-              <span>Kuliner Malam Makassar Terfavorit</span>
-            </div>
+      <div className="container mx-auto px-20 py-30 md:py-200">
+        <div className="grid lg:grid-cols-2 gap-20 items-center">
+          {/* Content */}
+          <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }} className="text-center lg:text-left space-y-6">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="inline-flex items-center gap-2 bg-red-100 text-red-700 px-4 py-2 rounded-full text-sm font-bold">
+              <span>Kelezatan Autentik Asia</span>
+            </motion.div>
 
-            {/* H1 Heading */}
-            <h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-[3.25rem] font-black leading-[1.15] text-slate-900 tracking-tight">
-              Kelezatan Renyah:{' '}
-              <span className="text-[#c1002d]">Rice Bowl</span>,{' '}
-              <span className="text-[#eb7300]">Taiwan Chicken</span> & Dimsum Goreng
+            <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-foreground">
+              Nikmati Cita Rasa <span className="text-gradient">Istimewa</span> di Setiap Suapanmu
             </h1>
 
-            {/* Paragraph */}
-            <p className="text-base sm:text-lg text-slate-600 max-w-xl mx-auto lg:mx-0 leading-relaxed font-normal">
-              Nikmati racikan ayam krispi hangat sambel matah segar khas Makassar, lumuran saus keju creamy gurih, dan dimsum keju lumer. Hadir di Inpres Maccini & Jl. Pongtiku depan JILC!
-            </p>
+            <p className="text-lg text-muted-foreground max-w-xl mx-auto lg:mx-0">Rice Bowl, Makanan Taiwan, dan Dimsum pilihan dengan bahan segar berkualitas. Pesan sekarang dan rasakan kelezatannya!</p>
 
-            {/* Value Highlights */}
-            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 text-xs sm:text-sm font-bold text-slate-700 pt-1">
-              <div className="flex items-center gap-1.5">
-                <CheckCircle2 size={16} className="text-[#c1002d]" />
-                <span>100% Halal & Segar</span>
+            <div className="flex flex-col sm:flex-row gap-6 justify-center lg:justify-start relative z-10 pointer-events-auto">
+              {/* WhatsApp */}
+              <div className="text-center sm:text-left">
+                {/* <p className="mb-2 text-muted-foreground select-text">Pesan langsung lewat WhatsApp kami</p> */}
+                <Button variant="hero" size="xl" onClick={handleWhatsAppOrder} className="group pointer-events-auto">
+                  Order via WhatsApp
+                  <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                </Button>
               </div>
-              <div className="flex items-center gap-1.5">
-                <Clock size={16} className="text-[#eb7300]" />
-                <span>Buka 17.30 - 23.30 WITA</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <MapPin size={16} className="text-[#c1002d]" />
-                <span>Pongtiku & Inpres Maccini</span>
-              </div>
-            </div>
 
-            {/* Dual Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-3.5 justify-center lg:justify-start pt-2">
-              <Button
-                onClick={handleWhatsAppOrder}
-                className="bg-[#c1002d] hover:bg-[#9c0f12] text-white font-black text-sm uppercase tracking-wider px-8 py-3.5 rounded-full shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2"
-              >
-                <span>Order via WhatsApp</span>
-                <ArrowRight size={18} />
-              </Button>
-
-              <Button
-                asChild
-                variant="outline"
-                className="border-2 border-slate-300 hover:border-[#c1002d] text-slate-800 hover:text-[#c1002d] hover:bg-red-50/50 font-black text-sm uppercase tracking-wider px-7 py-3.5 rounded-full shadow-sm transition-all"
-              >
-                <Link to="/products">Lihat Daftar Menu</Link>
-              </Button>
-            </div>
-
-            {/* Delivery Aggregator Bar (Model Lazuna) */}
-            <div className="pt-4 border-t border-slate-200/80 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 text-xs text-slate-500 font-bold">
-              <span>Tersedia pemesanan cepat di:</span>
-              <div className="flex items-center gap-2">
-                <span className="px-3 py-1 rounded-lg bg-slate-100 text-slate-700 font-extrabold text-[11px] border border-slate-200">
-                  WhatsApp Antar
-                </span>
-                <span className="px-3 py-1 rounded-lg bg-green-50 text-green-700 font-extrabold text-[11px] border border-green-200">
-                  GrabFood
-                </span>
-                <span className="px-3 py-1 rounded-lg bg-orange-50 text-orange-700 font-extrabold text-[11px] border border-orange-200">
-                  ShopeeFood
-                </span>
-                <span className="px-3 py-1 rounded-lg bg-red-50 text-red-700 font-extrabold text-[11px] border border-red-200">
-                  GoFood
-                </span>
+              {/* Menu */}
+              <div className="text-center sm:text-left">
+                {/* <p className="mb-2 text-muted-foreground select-text">Lihat daftar menu lengkap kami</p> */}
+                <Button size="xl" asChild className="inline-flex items-center gap-2 bg-red-100 text-red-700 px-4 py-2 font-bold">
+                  <Link to="/Products">Lihat Menu</Link>
+                </Button>
               </div>
             </div>
+
+            {/* Stats
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }} className="flex gap-8 justify-center lg:justify-start pt-4">
+              <div className="text-center">
+                <div className="font-display text-2xl md:text-3xl font-bold text-primary">11+</div>
+                <div className="text-sm text-muted-foreground">Menu Pilihan</div>
+              </div>
+              <div className="text-center">
+                <div className="font-display text-2xl md:text-3xl font-bold text-primary">10K+</div>
+                <div className="text-sm text-muted-foreground">Pelanggan Puas</div>
+              </div>
+              <div className="text-center">
+                <div className="font-display text-2xl md:text-3xl font-bold text-primary">4.9</div>
+                <div className="text-sm text-muted-foreground">Rating</div>
+              </div>
+            </motion.div> */}
           </motion.div>
 
-          {/* Hero Visual Column (5 cols) */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="lg:col-span-5 relative"
-          >
-            <div className="relative aspect-square max-w-md mx-auto">
-              {/* Warm Background Halo */}
-              <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-[#c1002d]/20 via-[#eb7300]/20 to-amber-300/30 blur-2xl animate-pulse-glow" />
-
-              {/* Main Image */}
-              <motion.div
-                animate={{ y: [0, -8, 0] }}
-                transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-                className="relative z-10 w-full h-full"
-              >
-                <img
-                  src={heroFood}
-                  alt="Kuliner Makassar Agang.id - Rice Bowl, Taiwan Chicken, Kulit Crispy dan Dimsum Goreng"
-                  className="w-full h-full object-cover rounded-3xl shadow-2xl border-4 border-white"
-                />
-
-                {/* Floating Price Tag Badge (Model Lazuna) */}
-                <div className="absolute -bottom-4 -left-4 bg-white border border-slate-200 rounded-2xl p-3.5 shadow-xl flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-[#c1002d] text-white flex items-center justify-center font-black text-sm">
-                    Rp
-                  </div>
-                  <div>
-                    <span className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider">
-                      Mulai Dari
-                    </span>
-                    <span className="font-display text-lg font-black text-[#c1002d]">
-                      Rp5.000 <span className="text-xs font-bold text-slate-700">/ porsi</span>
-                    </span>
-                  </div>
-                </div>
-
-                {/* Floating Rating Badge */}
-                <div className="absolute -top-3 -right-3 bg-white border border-slate-200 rounded-2xl px-3.5 py-2 shadow-lg flex items-center gap-1.5">
-                  <span className="text-amber-400 text-sm">★★★★★</span>
-                  <span className="text-xs font-black text-slate-800">4.9/5</span>
-                </div>
+          {/* Hero Image */}
+          <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 0.3 }} className="relative">
+            <div className="relative aspect-square max-w-lg mx-auto">
+              {/* Main Image Container */}
+              <div className="absolute inset-0 rounded-full bg-gradient-warm opacity-20 blur-3xl animate-pulse-glow" />
+              <motion.div animate={{ y: [0, -10, 0] }} transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }} className="relative z-10">
+                <img src={heroFood} alt="Makanan lezat dari Agang.id - Rice Bowl, Taiwan, Dimsum" className="w-full h-full object-cover rounded-3xl shadow-2xl" />
               </motion.div>
+
+              {/* <motion.div animate={{ y: [0, -15, 0], rotate: [0, 5, 0] }} transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 4 }} className="absolute top-4 right-4 bg-card p-4 rounded-2xl shadow-lg z-20">
+                <div className="text-3xl">🥟</div>
+                <div className="text-xs font-medium text-foreground mt-1">Dimsum</div>
+              </motion.div> */}
+              {/* <motion.div animate={{ y: [0, 10, 0], rotate: [0, -5, 0] }} transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }} className="absolute top-4 right-4 bg-card p-4 rounded-2xl shadow-lg z-20">
+                <div className="text-3xl">🍚</div>
+                <div className="text-xs font-medium text-foreground mt-1">Rice Bowl</div>
+              </motion.div> */}
             </div>
           </motion.div>
         </div>
