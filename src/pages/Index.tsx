@@ -17,23 +17,27 @@ const Index = () => {
       <Layout>
         <HeroSection />
 
-        {/* Section Stats dengan Garis Oranye di Atasnya */}
-        <section className="bg-background py-12 border-t-[6px] border-yellow-500">
-          <div className="container mx-auto px-4 md:px-20">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-              {[
-                { value: '20 K+', label: 'Member Active' },
-                { value: '1 +', label: 'Outlet Store' },
-                { value: '0 +', label: 'Signature Store' },
-                { value: '1 +', label: 'Years Experience' },
-              ].map((item, index) => (
-                <div key={index}>
-                  {/* Angka warna Hijau (seperti Yotta) */}
-                  <h2 className="text-4xl md:text-5xl font-bold text-white-700">{item.value}</h2>
-                  {/* Label warna Gelap/Abu agar jelas di background putih */}
-                  <p className="text-sm font-medium text-white-600 mt-2 uppercase tracking-wide">{item.label}</p>
-                </div>
-              ))}
+        {/* Section Stats Kompak & Rapi (Tanpa Garis Kuning) */}
+        <section className="py-6 sm:py-8 bg-background relative z-10">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto bg-black/20 border border-white/15 rounded-3xl p-6 sm:p-7 shadow-2xl backdrop-blur-md">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 text-center divide-y md:divide-y-0 md:divide-x divide-white/15">
+                {[
+                  { value: '20K+', label: 'Member Active' },
+                  { value: '2+', label: 'Outlet Store' },
+                  { value: '4.9★', label: 'Rating Kepuasan' },
+                  { value: '1+ Thn', label: 'Years Experience' },
+                ].map((item, index) => (
+                  <div key={index} className="pt-3 md:pt-0 px-2 sm:px-4 space-y-1">
+                    <div className="font-display text-2xl sm:text-3xl lg:text-4xl font-extrabold text-amber-300">
+                      {item.value}
+                    </div>
+                    <p className="text-[11px] sm:text-xs font-bold text-white/85 uppercase tracking-wider">
+                      {item.label}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </section>
