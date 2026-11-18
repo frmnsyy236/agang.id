@@ -119,3 +119,36 @@ EXCEPTION WHEN OTHERS THEN
   -- lewati jika sudah terdaftar
   NULL;
 END $$;
+
+
+-- 4. TABEL RIWAYAT PESANAN (orders)
+CREATE TABLE IF NOT EXISTS public.orders (
+  id TEXT PRIMARY KEY,
+  customer_data JSONB NOT NULL,
+  items JSONB NOT NULL,
+  total_amount NUMERIC NOT NULL DEFAULT 0,
+  status TEXT DEFAULT 'pending',
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- Index created_at untuk urutan pesanan terbaru
+CREATE INDEX IF NOT EXISTS idx_orders_created_at ON public.orders (created_at DESC);
+
+-- Aktifkan RLS untuk orders
+ALTER TABLE public.orders ENABLE ROW LEVEL SECURITY;
+
+-- Policy untuk tabel orders
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'orders' AND policyname = 'Public read orders') THEN
+    CREATE POLICY "Public read orders" ON public.orders FOR SELECT TO public USING (true);
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'orders' AND policyname = 'Public insert orders') THEN
+    CREATE POLICY "Public insert orders" ON public.orders FOR INSERT TO public WITH CHECK (true);
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'orders' AND policyname = 'Public update orders') THEN
+    CREATE POLICY "Public update orders" ON public.orders FOR UPDATE TO public USING (true);
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'orders' AND policyname = 'Public delete orders') THEN
+    CREATE POLICY "Public delete orders" ON public.orders FOR DELETE TO public USING (true);
+  END IF;
+END $$;

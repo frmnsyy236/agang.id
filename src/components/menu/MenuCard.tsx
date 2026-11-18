@@ -1,7 +1,8 @@
 import { motion } from 'framer-motion';
-import { Star, Sparkles } from 'lucide-react';
+import { Star, Sparkles, Plus, Minus, ShoppingBag } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { MenuItem, formatPrice } from '@/data/menuData';
+import { useCart } from '@/context/CartContext';
 
 interface MenuCardProps {
   item: MenuItem;
@@ -9,12 +10,9 @@ interface MenuCardProps {
 }
 
 export const MenuCard = ({ item, index }: MenuCardProps) => {
+  const { items, addToCart, updateQuantity } = useCart();
+  const cartItem = items.find((i) => i.id === item.id);
   const displayPrice = item.priceDisplay || formatPrice(item.price);
-
-  const handleOrder = () => {
-    const message = encodeURIComponent(`Halo Agang.id! Saya ingin memesan:\n\n*${item.name}*\nHarga: ${displayPrice}\n\nMohon konfirmasi ketersediaannya. Terima kasih!`);
-    window.open(`https://wa.me/6287726993572?text=${message}`, '_blank');
-  };
 
   const getFallbackImage = () => {
     const images: Record<string, string> = {
@@ -27,7 +25,7 @@ export const MenuCard = ({ item, index }: MenuCardProps) => {
 
   return (
     <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.05 }} className="group">
-      <div className="bg-card rounded-2xl overflow-hidden border border-border transition-all duration-300 hover:shadow-xl hover:-translate-y-2 h-full flex flex-col">
+      <div className="bg-card rounded-2xl overflow-hidden border border-border transition-all duration-300 hover:shadow-xl hover:-translate-y-2 h-full flex flex-col justify-between">
         {/* Image */}
         <div className="relative aspect-square overflow-hidden">
           <img
@@ -56,20 +54,51 @@ export const MenuCard = ({ item, index }: MenuCardProps) => {
         </div>
 
         {/* Content */}
-        <div className="p-5 space-y-3 flex-1 flex flex-col">
-          <div className="flex-1">
+        <div className="p-5 space-y-3 flex-1 flex flex-col justify-between">
+          <div>
             <h3 className="font-display text-lg font-semibold text-foreground mb-2 line-clamp-1">{item.name}</h3>
             <p className="text-sm text-muted-foreground line-clamp-2">{item.description}</p>
           </div>
-          <div className="flex items-center justify-between pt-2">
-            {/* Harga dibuat putih dengan background merah agar kontras */}
-            <div className="rounded-lg">
+
+          <div className="flex items-center justify-between pt-3 border-t border-white/10">
+            {/* Harga */}
+            <div>
               <span className="font-bold text-white text-base md:text-lg">{displayPrice}</span>
             </div>
 
-            <Button variant="hero" size="sm" onClick={handleOrder} className="font-bold">
-              Pesan
-            </Button>
+            {/* Cart Controller */}
+            {cartItem ? (
+              <div className="flex items-center gap-2 bg-[#520909] px-2.5 py-1.5 rounded-xl border border-white/20 shadow-inner">
+                <button
+                  type="button"
+                  onClick={() => updateQuantity(item.id, -1)}
+                  className="w-6 h-6 rounded-lg bg-white/20 hover:bg-white/30 text-white flex items-center justify-center font-bold active:scale-90 transition-transform"
+                  title="Kurang"
+                >
+                  <Minus size={12} />
+                </button>
+                <span className="text-xs font-black text-amber-300 w-5 text-center">
+                  {cartItem.quantity}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => updateQuantity(item.id, 1)}
+                  className="w-6 h-6 rounded-lg bg-white/20 hover:bg-white/30 text-white flex items-center justify-center font-bold active:scale-90 transition-transform"
+                  title="Tambah"
+                >
+                  <Plus size={12} />
+                </button>
+              </div>
+            ) : (
+              <Button
+                size="sm"
+                onClick={() => addToCart(item, 1)}
+                className="bg-amber-400 hover:bg-amber-300 text-red-950 font-black text-xs px-3.5 py-2 rounded-xl shadow-md active:scale-95 flex items-center gap-1.5"
+              >
+                <Plus size={14} />
+                <span>+ Pesan</span>
+              </Button>
+            )}
           </div>
         </div>
       </div>

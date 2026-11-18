@@ -35,7 +35,8 @@ import {
 import { toast } from 'sonner';
 import { AnalyticsDashboard } from '@/components/admin/AnalyticsDashboard';
 import { MenuManager } from '@/components/admin/MenuManager';
-import { UtensilsCrossed } from 'lucide-react';
+import { OrderManager } from '@/components/admin/OrderManager';
+import { UtensilsCrossed, ShoppingBag } from 'lucide-react';
 
 export const AdminBlog: React.FC = () => {
   const navigate = useNavigate();
@@ -57,8 +58,8 @@ export const AdminBlog: React.FC = () => {
   const [pinInput, setPinInput] = useState('');
   const [loginError, setLoginError] = useState('');
 
-  // Admin Active Tab: 'menu' (Kelola Menu & Harga), 'articles' (Kelola Berita), 'analytics' (Grafik Pengunjung)
-  const [adminActiveTab, setAdminActiveTab] = useState<'menu' | 'articles' | 'analytics'>('menu');
+  // Admin Active Tab: 'menu' (Kelola Menu & Harga), 'orders' (Pesanan Masuk), 'articles' (Kelola Berita), 'analytics' (Grafik Pengunjung)
+  const [adminActiveTab, setAdminActiveTab] = useState<'menu' | 'orders' | 'articles' | 'analytics'>('menu');
 
   // Dashboard Filters
   const [searchQuery, setSearchQuery] = useState('');
@@ -462,6 +463,19 @@ export const AdminBlog: React.FC = () => {
 
           <button
             type="button"
+            onClick={() => setAdminActiveTab('orders')}
+            className={`inline-flex items-center gap-2.5 px-6 py-3.5 rounded-2xl font-black text-xs sm:text-sm transition-all shadow-lg active:scale-95 ${
+              adminActiveTab === 'orders'
+                ? 'bg-amber-400 text-red-950 shadow-2xl scale-[1.02]'
+                : 'bg-[#6f0f0f] text-white/75 hover:text-white border border-white/15 hover:bg-[#7e1414]'
+            }`}
+          >
+            <ShoppingBag size={18} className={adminActiveTab === 'orders' ? 'text-red-950' : 'text-amber-400'} />
+            <span>Pesanan Masuk</span>
+          </button>
+
+          <button
+            type="button"
             onClick={() => setAdminActiveTab('analytics')}
             className={`inline-flex items-center gap-2.5 px-6 py-3.5 rounded-2xl font-black text-xs sm:text-sm transition-all shadow-lg active:scale-95 ${
               adminActiveTab === 'analytics'
@@ -493,10 +507,13 @@ export const AdminBlog: React.FC = () => {
         {/* Tab 1: Menu & Price Management */}
         {adminActiveTab === 'menu' && <MenuManager />}
 
-        {/* Tab 2: Analytics Dashboard with Visitor Charts */}
+        {/* Tab 2: Orders Management */}
+        {adminActiveTab === 'orders' && <OrderManager />}
+
+        {/* Tab 3: Analytics Dashboard with Visitor Charts */}
         {adminActiveTab === 'analytics' && <AnalyticsDashboard />}
 
-        {/* Tab 3: Article Management */}
+        {/* Tab 4: Article Management */}
         {adminActiveTab === 'articles' && (
           <div className="space-y-8">
             {/* Welcome & Stats Row */}

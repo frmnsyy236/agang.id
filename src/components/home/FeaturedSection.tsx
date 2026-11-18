@@ -1,24 +1,21 @@
 import { useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Star, Flame } from 'lucide-react';
+import { Star, Flame, Plus, Minus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { formatPrice } from '@/data/menuData';
 import { useMenu } from '@/context/MenuContext';
+import { useCart } from '@/context/CartContext';
 import { Link } from 'react-router-dom';
 
 export const FeaturedSection = () => {
   const { menuItems } = useMenu();
+  const { items: cartItems, addToCart, updateQuantity } = useCart();
 
   // Ambil menu yang ditandai Favorit/Populer sesuai urutan posisi, atau fallback ke 4 menu teratas
   const popularItems = useMemo(() => {
     const popular = menuItems.filter((i) => i.isPopular);
     return popular.length >= 4 ? popular.slice(0, 4) : menuItems.slice(0, 4);
   }, [menuItems]);
-
-  const handleOrderItem = (itemName: string, itemPriceText: string) => {
-    const message = encodeURIComponent(`Halo Agang.id! Saya ingin memesan:\n\n*${itemName}* - ${itemPriceText}\n\nMohon konfirmasi ketersediaannya. Terima kasih!`);
-    window.open(`https://wa.me/6287726993572?text=${message}`, '_blank');
-  };
 
   return (
     <section className="py-16 md:py-24 bg-muted/50">
@@ -41,6 +38,8 @@ export const FeaturedSection = () => {
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {popularItems.map((item, index) => {
             const priceText = item.priceDisplay || formatPrice(item.price);
+            const inCart = cartItems.find((ci) => ci.id === item.id);
+
             return (
               <motion.div key={item.id} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.1 }} className="group">
                 <div className="bg-card rounded-2xl overflow-hidden border transition-all duration-300 hover:shadow-xl hover:-translate-y-2 h-full flex flex-col justify-between">
@@ -79,12 +78,42 @@ export const FeaturedSection = () => {
                   </div>
 
                   <div className="p-4 pt-0">
-                    <div className="flex items-center justify-between pt-2 border-t border-border/40">
+                    <div className="flex items-center justify-between pt-3 border-t border-border/40">
                       <span className="font-bold text-white text-base md:text-lg">{priceText}</span>
 
-                      <Button variant="hero" size="sm" onClick={() => handleOrderItem(item.name, priceText)}>
-                        Pesan
-                      </Button>
+                      {/* Cart Controller */}
+                      {inCart ? (
+                        <div className="flex items-center gap-2 bg-[#520909] px-2.5 py-1.5 rounded-xl border border-white/20 shadow-inner">
+                          <button
+                            type="button"
+                            onClick={() => updateQuantity(item.id, -1)}
+                            className="w-6 h-6 rounded-lg bg-white/20 hover:bg-white/30 text-white flex items-center justify-center font-bold active:scale-90 transition-transform"
+                            title="Kurang"
+                          >
+                            <Minus size={12} />
+                          </button>
+                          <span className="text-xs font-black text-amber-300 w-5 text-center">
+                            {inCart.quantity}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => updateQuantity(item.id, 1)}
+                            className="w-6 h-6 rounded-lg bg-white/20 hover:bg-white/30 text-white flex items-center justify-center font-bold active:scale-90 transition-transform"
+                            title="Tambah"
+                          >
+                            <Plus size={12} />
+                          </button>
+                        </div>
+                      ) : (
+                        <Button
+                          size="sm"
+                          onClick={() => addToCart(item, 1)}
+                          className="bg-amber-400 hover:bg-amber-300 text-red-950 font-black text-xs px-3.5 py-2 rounded-xl shadow-md active:scale-95 flex items-center gap-1.5"
+                        >
+                          <Plus size={14} />
+                          <span>+ Pesan</span>
+                        </Button>
+                      )}
                     </div>
                   </div>
                 </div>
