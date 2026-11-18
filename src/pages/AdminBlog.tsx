@@ -315,7 +315,7 @@ export const AdminBlog: React.FC = () => {
   // IF NOT AUTHENTICATED: Show Login Screen
   if (!isAdminAuthenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-[#580c0c] via-[#730f0f] to-[#520909] text-white flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-b from-[#BD0505] via-[#9e0404] to-[#6d0202] text-white flex items-center justify-center p-4">
         <Helmet>
           <title>Login Super Admin - Agang.id</title>
         </Helmet>
@@ -387,7 +387,7 @@ export const AdminBlog: React.FC = () => {
 
   // IF AUTHENTICATED: Show Super Admin Dashboard
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#580c0c] via-[#730f0f] to-[#520909] text-white pb-20">
+    <div className="min-h-screen bg-gradient-to-b from-[#BD0505] via-[#9e0404] to-[#6d0202] text-white pb-20">
       <Helmet>
         <title>Dashboard Super Admin Berita & Artikel - Agang.id</title>
       </Helmet>

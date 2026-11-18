@@ -6,33 +6,33 @@
 
 @layer base {
   :root {
-    /* --- KONSEP UTAMA: BACKGROUND MERAH & TEKS PUTIH --- */
+    /* --- KONSEP UTAMA: BACKGROUND MERAH AGANG.ID (#BD0505) & TEKS PUTIH --- */
 
-    /* Background Utama: Crimson Red */
-    --background: 0 70% 45%;
+    /* Background Utama: #BD0505 (R=189, G=5, B=5) -> hsl(0 95% 38%) */
+    --background: 0 95% 38%;
     --foreground: 0 0% 100%;
 
-    /* Card & Popover: Dibuat sedikit lebih gelap dari background agar ada dimensi */
-    --card: 0 70% 40%;
+    /* Card & Popover: Dibuat sedikit lebih gelap dari background agar ada dimensi yang tegas */
+    --card: 0 90% 31%;
     --card-foreground: 0 0% 100%;
 
-    --popover: 0 70% 40%;
+    --popover: 0 90% 31%;
     --popover-foreground: 0 0% 100%;
 
-    /* Primary: Tetap Merah Terang (untuk Button/Action) */
-    --primary: 0 75% 50%;
+    /* Primary: Merah Terang untuk Button/Action */
+    --primary: 0 95% 48%;
     --primary-foreground: 0 0% 100%;
 
-    /* Secondary: Oranye Hangat untuk aksen yang tetap matching dengan merah */
-    --secondary: 0 75% 50%;
+    /* Secondary: Emas/Oranye Hangat untuk aksen matching dengan logo */
+    --secondary: 35 95% 50%;
     --secondary-foreground: 0 0% 100%;
 
-    /* Muted: Merah yang sangat gelap agar teks muted tidak hilang tapi tetap halus */
-    --muted: 0 70% 35%;
+    /* Muted: Merah gelap agar teks muted tetap halus */
+    --muted: 0 85% 26%;
     --muted-foreground: 0 0% 90%;
 
-    /* Accent: Cokelat Gelap / Deep Maroon */
-    --accent: 0 80% 25%;
+    /* Accent: Deep Maroon pekat untuk footer */
+    --accent: 0 95% 20%;
     --accent-foreground: 0 0% 100%;
 
     /* State: Border & Ring menggunakan putih transparan */
@@ -46,7 +46,7 @@
     --radius: 0.75rem;
 
     /* --- SIDEBAR CUSTOMIZATION --- */
-    --sidebar-background: 0 0% 100%;
+    --sidebar-background: 0 95% 38%;
     --sidebar-foreground: 0 0% 100%;
     --sidebar-primary: 0 0% 100%;
     --sidebar-primary-foreground: 0 0% 100%;
@@ -56,22 +56,22 @@
     --sidebar-ring: 0 0% 100% / 0.5;
 
     /* Gradients */
-    --gradient-warm: linear-gradient(135deg, hsl(0 00% 100%) 0%, hsl(0, 0%, 100%) 100%);
-    --gradient-hero: linear-gradient(180deg, hsl(0 00% 100%) 0%, hsl(0, 0%, 100%) 100%);
+    --gradient-warm: linear-gradient(135deg, #ffffff 0%, #fff1dc 100%);
+    --gradient-hero: linear-gradient(180deg, #BD0505 0%, #9e0404 100%);
   }
 
   /* Mode Gelap: Dibuat lebih ke arah Deep Maroon/Blackish Red */
   .dark {
-    --background: 0 80% 10%;
+    --background: 0 95% 15%;
     --foreground: 0 0% 100%;
 
-    --card: 0 80% 12%;
+    --card: 0 90% 18%;
     --card-foreground: 0 0% 100%;
 
-    --primary: 0 70% 55%;
-    --primary-foreground: 0 80% 10%;
+    --primary: 0 95% 45%;
+    --primary-foreground: 0 0% 100%;
 
-    --border: 0 0% 100% / 0.15%;
+    --border: 0 0% 100% / 0.15;
   }
 }
 
@@ -82,11 +82,13 @@
 
   html {
     scroll-behavior: smooth;
+    background-color: #BD0505;
   }
 
   body {
-    /* Pastikan font putih dan background merah diterapkan secara global */
+    /* Pastikan font putih dan background merah #BD0505 diterapkan secara global */
     @apply bg-background text-foreground antialiased;
+    background-color: #BD0505;
     font-family: 'Inter', sans-serif;
   }
 
@@ -102,6 +104,14 @@
 }
 
 @layer utilities {
+  .bg-gradient-hero {
+    background-image: var(--gradient-hero);
+  }
+
+  .bg-gradient-warm {
+    background-image: var(--gradient-warm);
+  }
+
   .text-gradient {
     @apply bg-clip-text text-transparent;
     background-image: var(--gradient-warm);
@@ -112,13 +122,13 @@
   }
 }
 
-/* Custom Scrollbar agar tidak merusak tema merah */
+/* Custom Scrollbar agar senada dengan tema merah #BD0505 */
 ::-webkit-scrollbar {
   width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: hsl(var(--background));
+  background: #BD0505;
 }
 
 ::-webkit-scrollbar-thumb {

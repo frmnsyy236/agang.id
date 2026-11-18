@@ -18,7 +18,7 @@ const Index = () => {
         <HeroSection />
 
         {/* Section Stats dengan Garis Oranye di Atasnya */}
-        <section className="bg-red py-12 border-t-[6px] border-yellow-500">
+        <section className="bg-background py-12 border-t-[6px] border-yellow-500">
           <div className="container mx-auto px-4 md:px-20">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
               {[
