@@ -34,6 +34,8 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { AnalyticsDashboard } from '@/components/admin/AnalyticsDashboard';
+import { MenuManager } from '@/components/admin/MenuManager';
+import { UtensilsCrossed } from 'lucide-react';
 
 export const AdminBlog: React.FC = () => {
   const navigate = useNavigate();
@@ -55,8 +57,8 @@ export const AdminBlog: React.FC = () => {
   const [pinInput, setPinInput] = useState('');
   const [loginError, setLoginError] = useState('');
 
-  // Admin Active Tab: 'analytics' (Grafik Pengunjung) atau 'articles' (Kelola Berita)
-  const [adminActiveTab, setAdminActiveTab] = useState<'analytics' | 'articles'>('analytics');
+  // Admin Active Tab: 'menu' (Kelola Menu & Harga), 'articles' (Kelola Berita), 'analytics' (Grafik Pengunjung)
+  const [adminActiveTab, setAdminActiveTab] = useState<'menu' | 'articles' | 'analytics'>('menu');
 
   // Dashboard Filters
   const [searchQuery, setSearchQuery] = useState('');
@@ -443,8 +445,21 @@ export const AdminBlog: React.FC = () => {
 
       {/* Main Admin Content Container */}
       <main className="container mx-auto px-4 max-w-7xl pt-8 space-y-8">
-        {/* Navigation Tabs Admin: Analytics vs Artikel */}
+        {/* Navigation Tabs Admin: Menu & Harga vs Analytics vs Artikel */}
         <div className="flex flex-wrap items-center gap-3">
+          <button
+            type="button"
+            onClick={() => setAdminActiveTab('menu')}
+            className={`inline-flex items-center gap-2.5 px-6 py-3.5 rounded-2xl font-black text-xs sm:text-sm transition-all shadow-lg active:scale-95 ${
+              adminActiveTab === 'menu'
+                ? 'bg-amber-400 text-red-950 shadow-2xl scale-[1.02]'
+                : 'bg-[#6f0f0f] text-white/75 hover:text-white border border-white/15 hover:bg-[#7e1414]'
+            }`}
+          >
+            <UtensilsCrossed size={18} className={adminActiveTab === 'menu' ? 'text-red-950' : 'text-amber-400'} />
+            <span>Kelola Menu & Harga</span>
+          </button>
+
           <button
             type="button"
             onClick={() => setAdminActiveTab('analytics')}
@@ -475,10 +490,13 @@ export const AdminBlog: React.FC = () => {
           </button>
         </div>
 
-        {/* Tab 1: Analytics Dashboard with Visitor Charts */}
+        {/* Tab 1: Menu & Price Management */}
+        {adminActiveTab === 'menu' && <MenuManager />}
+
+        {/* Tab 2: Analytics Dashboard with Visitor Charts */}
         {adminActiveTab === 'analytics' && <AnalyticsDashboard />}
 
-        {/* Tab 2: Article Management */}
+        {/* Tab 3: Article Management */}
         {adminActiveTab === 'articles' && (
           <div className="space-y-8">
             {/* Welcome & Stats Row */}

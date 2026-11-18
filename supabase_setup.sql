@@ -72,3 +72,50 @@ DO $$ BEGIN
     CREATE POLICY "Public delete articles" ON public.articles FOR DELETE TO public USING (true);
   END IF;
 END $$;
+
+
+-- 3. TABEL DAFTAR MENU & HARGA (menu_items)
+CREATE TABLE IF NOT EXISTS public.menu_items (
+  id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  description TEXT,
+  price NUMERIC NOT NULL DEFAULT 0,
+  price_display TEXT,
+  image TEXT,
+  category TEXT NOT NULL DEFAULT 'ricebowl',
+  is_popular BOOLEAN DEFAULT false,
+  is_new BOOLEAN DEFAULT false,
+  display_order INTEGER DEFAULT 0,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- Index urutan posisi
+CREATE INDEX IF NOT EXISTS idx_menu_items_display_order ON public.menu_items (display_order ASC);
+
+-- Aktifkan RLS untuk menu_items
+ALTER TABLE public.menu_items ENABLE ROW LEVEL SECURITY;
+
+-- Policy untuk tabel menu_items (Public Read & Public Insert/Update/Delete via anon)
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'menu_items' AND policyname = 'Public read menu_items') THEN
+    CREATE POLICY "Public read menu_items" ON public.menu_items FOR SELECT TO public USING (true);
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'menu_items' AND policyname = 'Public insert menu_items') THEN
+    CREATE POLICY "Public insert menu_items" ON public.menu_items FOR INSERT TO public WITH CHECK (true);
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'menu_items' AND policyname = 'Public update menu_items') THEN
+    CREATE POLICY "Public update menu_items" ON public.menu_items FOR UPDATE TO public USING (true);
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'menu_items' AND policyname = 'Public delete menu_items') THEN
+    CREATE POLICY "Public delete menu_items" ON public.menu_items FOR DELETE TO public USING (true);
+  END IF;
+END $$;
+
+-- Aktifkan Realtime Replication untuk menu_items (opsional)
+DO $$ BEGIN
+  ALTER PUBLICATION supabase_realtime ADD TABLE public.menu_items;
+EXCEPTION WHEN OTHERS THEN
+  -- lewati jika sudah terdaftar
+  NULL;
+END $$;

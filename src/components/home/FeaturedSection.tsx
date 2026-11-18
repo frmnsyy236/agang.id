@@ -1,16 +1,22 @@
+import { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Star, Flame } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { menuItems, formatPrice } from '@/data/menuData';
+import { formatPrice } from '@/data/menuData';
+import { useMenu } from '@/context/MenuContext';
 import { Link } from 'react-router-dom';
 
 export const FeaturedSection = () => {
-  // FIX: ambil 4 menu pertama sebagai menu favorit
-  const popularItems = menuItems.slice(0, 4);
+  const { menuItems } = useMenu();
 
-  const handleOrderItem = (itemName: string, itemPrice: number) => {
-    const message = encodeURIComponent(`Halo Agang.id! Saya ingin memesan:\n\n${itemName} - ${formatPrice(itemPrice)}\n\nMohon konfirmasi ketersediaannya. Terima kasih!`);
+  // Ambil menu yang ditandai Favorit/Populer sesuai urutan posisi, atau fallback ke 4 menu teratas
+  const popularItems = useMemo(() => {
+    const popular = menuItems.filter((i) => i.isPopular);
+    return popular.length >= 4 ? popular.slice(0, 4) : menuItems.slice(0, 4);
+  }, [menuItems]);
 
+  const handleOrderItem = (itemName: string, itemPriceText: string) => {
+    const message = encodeURIComponent(`Halo Agang.id! Saya ingin memesan:\n\n*${itemName}* - ${itemPriceText}\n\nMohon konfirmasi ketersediaannya. Terima kasih!`);
     window.open(`https://wa.me/6287726993572?text=${message}`, '_blank');
   };
 
@@ -33,56 +39,64 @@ export const FeaturedSection = () => {
 
         {/* Menu Cards */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {popularItems.map((item, index) => (
-            <motion.div key={item.id} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.1 }} className="group">
-              <div className="bg-card rounded-2xl overflow-hidden border transition-all duration-300 hover:shadow-xl hover:-translate-y-2">
-                {/* Image */}
-                <div className="relative aspect-square overflow-hidden">
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    onError={(e) => {
-                      const fallbacks = [
-                        'https://images.unsplash.com/photo-1512058564366-18510be2db19?w=400&h=400&fit=crop',
-                        'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=400&h=400&fit=crop',
-                        'https://images.unsplash.com/photo-1563245372-f21724e3856d?w=400&h=400&fit=crop',
-                        'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?w=400&h=400&fit=crop',
-                      ];
-                      e.currentTarget.src = fallbacks[index % fallbacks.length];
-                    }}
-                  />
+          {popularItems.map((item, index) => {
+            const priceText = item.priceDisplay || formatPrice(item.price);
+            return (
+              <motion.div key={item.id} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.1 }} className="group">
+                <div className="bg-card rounded-2xl overflow-hidden border transition-all duration-300 hover:shadow-xl hover:-translate-y-2 h-full flex flex-col justify-between">
+                  <div>
+                    {/* Image */}
+                    <div className="relative aspect-square overflow-hidden">
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        onError={(e) => {
+                          const fallbacks = [
+                            'https://images.unsplash.com/photo-1512058564366-18510be2db19?w=400&h=400&fit=crop',
+                            'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=400&h=400&fit=crop',
+                            'https://images.unsplash.com/photo-1563245372-f21724e3856d?w=400&h=400&fit=crop',
+                            'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?w=400&h=400&fit=crop',
+                          ];
+                          e.currentTarget.src = fallbacks[index % fallbacks.length];
+                        }}
+                      />
 
-                  {/* Badge */}
-                  <div className="absolute top-3 left-3 bg-secondary text-secondary-foreground px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
-                    <Star size={12} fill="currentColor" />
-                    Favorit
+                      {/* Badge */}
+                      {item.isPopular && (
+                        <div className="absolute top-3 left-3 bg-secondary text-secondary-foreground px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1 shadow-md">
+                          <Star size={12} fill="currentColor" />
+                          Favorit
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Content */}
+                    <div className="p-4 space-y-2">
+                      <h3 className="font-semibold text-lg line-clamp-1">{item.name}</h3>
+                      <p className="text-sm text-muted-foreground line-clamp-2">{item.description}</p>
+                    </div>
+                  </div>
+
+                  <div className="p-4 pt-0">
+                    <div className="flex items-center justify-between pt-2 border-t border-border/40">
+                      <span className="font-bold text-white text-base md:text-lg">{priceText}</span>
+
+                      <Button variant="hero" size="sm" onClick={() => handleOrderItem(item.name, priceText)}>
+                        Pesan
+                      </Button>
+                    </div>
                   </div>
                 </div>
-
-                {/* Content */}
-                <div className="p-4 space-y-3">
-                  <h3 className="font-semibold text-lg line-clamp-1">{item.name}</h3>
-
-                  <p className="text-sm text-muted-foreground line-clamp-2">{item.description}</p>
-
-                  <div className="flex items-center justify-between pt-2">
-                    <span className="font-bold text-white text-lg md:text-xl">{formatPrice(item.price)}</span>
-
-                    <Button variant="hero" size="sm" onClick={() => handleOrderItem(item.name, item.price)}>
-                      Pesan
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            );
+          })}
         </div>
 
         {/* Button */}
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mt-10">
           <Button size="lg" asChild className="bg-white text-red-600 hover:bg-gray-200 font-bold px-8 rounded-xl shadow-lg-100">
-            <Link to="/Products">Lihat Semua Menu</Link>
+            <Link to="/products">Lihat Semua Menu</Link>
           </Button>
         </motion.div>
       </div>

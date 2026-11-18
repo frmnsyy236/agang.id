@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { BlogProvider } from '@/context/BlogContext';
+import { MenuProvider } from '@/context/MenuContext';
 
 import { PageTracker } from '@/components/common/PageTracker';
 
@@ -23,29 +24,31 @@ const App = () => (
   <HelmetProvider>
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <BlogProvider>
-          <Toaster />
-          <Sonner position="top-center" richColors />
-          <BrowserRouter>
-            <PageTracker />
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/promo" element={<Promo />} />
-              <Route path="/products" element={<Products />} />
-              <Route path="/Products" element={<Products />} />
-              <Route path="/menu" element={<Products />} />
-              <Route path="/blog" element={<BlogPost />} />
-              <Route path="/BlogPost" element={<BlogPost />} />
-              <Route path="/blog/:slug" element={<BlogDetail />} />
-              <Route path="/admin" element={<AdminBlog />} />
-              <Route path="/admin/blog" element={<AdminBlog />} />
-              <Route path="/admin/articles" element={<AdminBlog />} />
-              <Route path="/admin/artikel" element={<AdminBlog />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
-        </BlogProvider>
+        <MenuProvider>
+          <BlogProvider>
+            <Toaster />
+            <Sonner position="top-center" richColors />
+            <BrowserRouter>
+              <PageTracker />
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/promo" element={<Promo />} />
+                <Route path="/products" element={<Products />} />
+                <Route path="/Products" element={<Products />} />
+                <Route path="/menu" element={<Products />} />
+                <Route path="/blog" element={<BlogPost />} />
+                <Route path="/BlogPost" element={<BlogPost />} />
+                <Route path="/blog/:slug" element={<BlogDetail />} />
+                <Route path="/admin" element={<AdminBlog />} />
+                <Route path="/admin/blog" element={<AdminBlog />} />
+                <Route path="/admin/articles" element={<AdminBlog />} />
+                <Route path="/admin/artikel" element={<AdminBlog />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </BrowserRouter>
+          </BlogProvider>
+        </MenuProvider>
       </TooltipProvider>
     </QueryClientProvider>
   </HelmetProvider>

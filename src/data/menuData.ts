@@ -10,18 +10,9 @@ import menuTaiwanBBQ from '@/assets/Taiwan BBQ.jpg';
 import menuDimsumOriginal from '@/assets/dimsum original .jpg';
 import menuDimsumMentaiCheese from '@/assets/dimsummentaichesee.jpg';
 import menuDimsumMentai from '@/assets/dimsummentai.jpg';
+import { MenuItem } from '@/types/menu';
 
-export interface MenuItem {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  priceDisplay?: string;
-  image: string;
-  category: 'ricebowl' | 'taiwan' | 'dimsum';
-  isPopular?: boolean;
-  isNew?: boolean;
-}
+export type { MenuItem };
 
 export const menuItems: MenuItem[] = [
   // === 5 Menu Flagship Kuliner Makassar Agang.id ===
@@ -34,6 +25,7 @@ export const menuItems: MenuItem[] = [
     image: menuRicebowlOriginal,
     category: 'ricebowl',
     isPopular: true,
+    order: 0,
   },
   {
     id: 'rb-cheese',
@@ -44,6 +36,7 @@ export const menuItems: MenuItem[] = [
     image: menuRicebowlCheese,
     category: 'ricebowl',
     isPopular: true,
+    order: 1,
   },
   {
     id: 'tw-taiwan',
@@ -54,6 +47,7 @@ export const menuItems: MenuItem[] = [
     image: menuTaiwanCheese,
     category: 'taiwan',
     isPopular: true,
+    order: 2,
   },
   {
     id: 'tw-kulit',
@@ -64,6 +58,7 @@ export const menuItems: MenuItem[] = [
     image: menuRicebowlKatsu,
     category: 'taiwan',
     isPopular: true,
+    order: 3,
   },
   {
     id: 'ds-goreng',
@@ -74,6 +69,7 @@ export const menuItems: MenuItem[] = [
     image: menuDimsumOriginal,
     category: 'dimsum',
     isPopular: true,
+    order: 4,
   },
 
   // === Menu Favorit Lainnya ===
@@ -85,6 +81,7 @@ export const menuItems: MenuItem[] = [
     priceDisplay: 'Rp18.500',
     image: menuRicebowlTokyo,
     category: 'ricebowl',
+    order: 5,
   },
   {
     id: 'tw-balado',
@@ -94,6 +91,7 @@ export const menuItems: MenuItem[] = [
     priceDisplay: 'Rp17.000',
     image: menuTaiwanBalado,
     category: 'taiwan',
+    order: 6,
   },
   {
     id: 'tw-bbq',
@@ -103,6 +101,7 @@ export const menuItems: MenuItem[] = [
     priceDisplay: 'Rp17.000',
     image: menuTaiwanBBQ,
     category: 'taiwan',
+    order: 7,
   },
   {
     id: 'ds-mentaicheese',
@@ -112,6 +111,7 @@ export const menuItems: MenuItem[] = [
     priceDisplay: 'Rp28.000',
     image: menuDimsumMentaiCheese,
     category: 'dimsum',
+    order: 8,
   },
   {
     id: 'ds-mentai',
@@ -121,8 +121,11 @@ export const menuItems: MenuItem[] = [
     priceDisplay: 'Rp23.000',
     image: menuDimsumMentai,
     category: 'dimsum',
+    order: 9,
   },
 ];
+
+export const initialMenuItems: MenuItem[] = menuItems;
 
 export const categories = [
   {

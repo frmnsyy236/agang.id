@@ -9,8 +9,10 @@ interface MenuCardProps {
 }
 
 export const MenuCard = ({ item, index }: MenuCardProps) => {
+  const displayPrice = item.priceDisplay || formatPrice(item.price);
+
   const handleOrder = () => {
-    const message = encodeURIComponent(`Halo Agang.id! Saya ingin memesan:\n\n*${item.name}*\nHarga: ${formatPrice(item.price)}\n\nMohon konfirmasi ketersediaannya. Terima kasih!`);
+    const message = encodeURIComponent(`Halo Agang.id! Saya ingin memesan:\n\n*${item.name}*\nHarga: ${displayPrice}\n\nMohon konfirmasi ketersediaannya. Terima kasih!`);
     window.open(`https://wa.me/6287726993572?text=${message}`, '_blank');
   };
 
@@ -36,16 +38,16 @@ export const MenuCard = ({ item, index }: MenuCardProps) => {
               e.currentTarget.src = getFallbackImage();
             }}
           />
-          Badges
+          {/* Badges */}
           <div className="absolute top-3 left-3 flex flex-col gap-2">
             {item.isPopular && (
-              <div className="bg-secondary text-secondary-foreground px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
+              <div className="bg-secondary text-secondary-foreground px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1 shadow-md">
                 <Star size={12} fill="currentColor" />
                 Favorit
               </div>
             )}
             {item.isNew && (
-              <div className="bg-primary text-primary-foreground px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
+              <div className="bg-primary text-primary-foreground px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1 shadow-md">
                 <Sparkles size={12} />
                 Baru
               </div>
@@ -62,7 +64,7 @@ export const MenuCard = ({ item, index }: MenuCardProps) => {
           <div className="flex items-center justify-between pt-2">
             {/* Harga dibuat putih dengan background merah agar kontras */}
             <div className="rounded-lg">
-              <span className="font-bold text-white text-lg md:text-xl">{formatPrice(item.price)}</span>
+              <span className="font-bold text-white text-base md:text-lg">{displayPrice}</span>
             </div>
 
             <Button variant="hero" size="sm" onClick={handleOrder} className="font-bold">

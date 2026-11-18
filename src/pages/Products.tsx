@@ -4,10 +4,11 @@ import { motion } from "framer-motion";
 import { Layout } from "@/components/layout/Layout";
 import { MenuCard } from "@/components/menu/MenuCard";
 import { CategoryFilter } from "@/components/menu/CategoryFilter";
-import { menuItems } from "@/data/menuData";
+import { useMenu } from "@/context/MenuContext";
 import { Helmet } from "react-helmet-async";
 
 const Products = () => {
+  const { menuItems } = useMenu();
   const [searchParams, setSearchParams] = useSearchParams();
   const [activeCategory, setActiveCategory] = useState(
     searchParams.get("category") || "all"
