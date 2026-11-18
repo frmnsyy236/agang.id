@@ -12,15 +12,7 @@ export const HeroSection = () => {
 
   return (
     <section className="relative min-h-[90vh] flex items-center bg-gradient-hero overflow-hidden">
-      {/* Background Pattern */}
-      {/* <div className="absolute inset-0 opacity-5">
-        <div className="absolute top-20 left-10 text-8xl">🍜</div>
-        <div className="absolute top-40 right-20 text-6xl">🥟</div>
-        <div className="absolute bottom-32 left-1/4 text-7xl">🍚</div>
-        <div className="absolute bottom-20 right-10 text-5xl">🥢</div>
-      </div> */}
-
-      <div className="container mx-auto px-20 py-30 md:py-200">
+      <div className="container mx-auto px-6 md:px-20 py-24 md:py-32">
         <div className="grid lg:grid-cols-2 gap-20 items-center">
           {/* Content */}
           <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }} className="text-center lg:text-left space-y-6">
@@ -78,15 +70,6 @@ export const HeroSection = () => {
               <motion.div animate={{ y: [0, -10, 0] }} transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }} className="relative z-10">
                 <img src={heroFood} alt="Makanan lezat dari Agang.id - Rice Bowl, Taiwan, Dimsum" className="w-full h-full object-cover rounded-3xl shadow-2xl" />
               </motion.div>
-
-              {/* <motion.div animate={{ y: [0, -15, 0], rotate: [0, 5, 0] }} transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 4 }} className="absolute top-4 right-4 bg-card p-4 rounded-2xl shadow-lg z-20">
-                <div className="text-3xl">🥟</div>
-                <div className="text-xs font-medium text-foreground mt-1">Dimsum</div>
-              </motion.div> */}
-              {/* <motion.div animate={{ y: [0, 10, 0], rotate: [0, -5, 0] }} transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }} className="absolute top-4 right-4 bg-card p-4 rounded-2xl shadow-lg z-20">
-                <div className="text-3xl">🍚</div>
-                <div className="text-xs font-medium text-foreground mt-1">Rice Bowl</div>
-              </motion.div> */}
             </div>
           </motion.div>
         </div>
