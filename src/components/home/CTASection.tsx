@@ -9,7 +9,7 @@ export const CTASection = () => {
   };
 
   return (
-    <section className="py-16 md:py-24 bg-[#630303] border-t border-b border-white/10 text-white relative overflow-hidden">
+    <section id="cara-pesan" className="py-16 md:py-24 bg-[#630303] border-t border-b border-white/10 text-white relative overflow-hidden">
       <div className="container mx-auto px-4 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -18,11 +18,11 @@ export const CTASection = () => {
           className="text-center max-w-2xl mx-auto space-y-6"
         >
           <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-white">
-            Lapar? Pesan Sekarang!
+            Cara Pesan Cepat Agang.id Makassar
           </h2>
 
           <p className="text-base sm:text-lg text-white/90 leading-relaxed max-w-xl mx-auto">
-            Order langsung via WhatsApp dan nikmati kelezatan Agang.id dalam hitungan menit. Fresh dimasak hangat untuk Anda!
+            Lapar? Order langsung via WhatsApp resmi dan nikmati Rice Bowl, Taiwan Chicken, serta Dimsum Goreng hangat dalam hitungan menit. Tersedia layanan takeaway dan dine-in di outlet Jl. Kerung-Kerung & Jl. Pongtiku Makassar!
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-2">
@@ -38,7 +38,7 @@ export const CTASection = () => {
           </div>
 
           <p className="text-xs sm:text-sm text-white/80 font-medium pt-2">
-            Jam operasional: 17:30 - 23:30 WITA (Buka Setiap Hari)
+            Jam operasional: 17:30 - 23:30 WITA (Buka Setiap Hari di Outlet Makassar)
           </p>
         </motion.div>
       </div>

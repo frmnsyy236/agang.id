@@ -10,8 +10,11 @@ const Index = () => {
   return (
     <>
       <Helmet>
-        <title>Agang.id - Rice Bowl, Makanan Taiwan & Dimsum Terlezat</title>
-        <meta name="description" content="Nikmati kelezatan autentik Rice Bowl, Makanan Taiwan, dan Dimsum pilihan dari Agang.id. Pesan sekarang via WhatsApp!" />
+        <title>Agang.id - Rice Bowl & Taiwan Chicken Makassar</title>
+        <meta name="description" content="Nikmati Rice Bowl, Taiwan Crispy Chicken, dan Dimsum Goreng favorit di Makassar. Pesan praktis via WhatsApp atau kunjungi outlet Agang.id terdekat!" />
+        <link rel="canonical" href="https://agang-id.vercel.app/" />
+        <link rel="alternate" hreflang="id" href="https://agang-id.vercel.app/" />
+        <link rel="alternate" hreflang="x-default" href="https://agang-id.vercel.app/" />
       </Helmet>
 
       <Layout>

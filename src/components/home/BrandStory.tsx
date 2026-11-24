@@ -22,13 +22,13 @@ const values = [
 
 export const BrandStory = () => {
   return (
-    <section className="py-16 md:py-24 bg-background overflow-hidden">
+    <section id="tentang" className="py-16 md:py-24 bg-background overflow-hidden">
       <div className="container mx-auto px-4">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Image */}
           <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="relative">
             <div className="relative aspect-[4/3] rounded-3xl overflow-hidden">
-              <img src={aboutStory} alt="Dapur Agang.id" className="w-full h-full object-cover" />
+              <img src={aboutStory} alt="Gerobak dan Dapur Kuliner Agang.id Makassar" loading="lazy" className="w-full h-full object-cover" />
               <div className="absolute inset-0 bg-gradient-to-t from-accent/60 to-transparent" />
               <div className="absolute bottom-6 left-6 right-6">
                 <p className="font-display text-2xl text-accent-foreground font-bold">"Hari ini gerobak, besok jaringan usaha"</p>
@@ -42,7 +42,7 @@ export const BrandStory = () => {
           <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="space-y-6">
             <div className="space-y-4">
               <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground">
-                Cerita di Balik <span className="text-gradient">Agang.id</span>
+                Tentang Kuliner <span className="text-gradient">Agang.id Makassar</span>
               </h2>
               <p className="text-muted-foreground leading-relaxed">
                 Di pinggir jalan, berdiri sebuah gerobak sederhana bernama Agang.id. Terlihat biasa, tapi menyimpan mimpi yang luar biasa. Setiap porsi yang disajikan bukan hanya tentang makanan, tapi tentang perjuangan, konsistensi, dan

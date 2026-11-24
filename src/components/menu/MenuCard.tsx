@@ -96,7 +96,7 @@ export const MenuCard = ({ item, index }: MenuCardProps) => {
                 className="bg-amber-400 hover:bg-amber-300 text-red-950 font-black text-xs px-3.5 py-2 rounded-xl shadow-md active:scale-95 flex items-center gap-1.5"
               >
                 <Plus size={14} />
-                <span>+ Pesan</span>
+                <span>Pesan</span>
               </Button>
             )}
           </div>

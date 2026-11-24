@@ -18,7 +18,7 @@ export const FeaturedSection = () => {
   }, [menuItems]);
 
   return (
-    <section className="py-16 md:py-24 bg-muted/50">
+    <section id="menu" className="py-16 md:py-24 bg-muted/50">
       <div className="container mx-auto px-4">
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
@@ -28,10 +28,12 @@ export const FeaturedSection = () => {
           </div>
 
           <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">
-            Menu <span className="text-gradient">Terlaris</span>
+            Menu Favorit <span className="text-gradient">Agang.id Makassar</span>
           </h2>
 
-          <p className="text-muted-foreground max-w-2xl mx-auto">Pilihan favorit pelanggan kami yang wajib kamu coba</p>
+          <p className="text-muted-foreground max-w-2xl mx-auto">
+            Pilihan menu Rice Bowl, Taiwan Crispy Chicken, dan Dimsum Goreng favorit di Makassar yang wajib kamu coba
+          </p>
         </motion.div>
 
         {/* Menu Cards */}
@@ -48,7 +50,8 @@ export const FeaturedSection = () => {
                     <div className="relative aspect-square overflow-hidden">
                       <img
                         src={item.image}
-                        alt={item.name}
+                        alt={`${item.name} - Kuliner Agang.id Makassar`}
+                        loading="lazy"
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                         onError={(e) => {
                           const fallbacks = [
@@ -111,7 +114,7 @@ export const FeaturedSection = () => {
                           className="bg-amber-400 hover:bg-amber-300 text-red-950 font-black text-xs px-3.5 py-2 rounded-xl shadow-md active:scale-95 flex items-center gap-1.5"
                         >
                           <Plus size={14} />
-                          <span>+ Pesan</span>
+                          <span>Pesan</span>
                         </Button>
                       )}
                     </div>

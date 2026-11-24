@@ -21,10 +21,12 @@ export const HeroSection = () => {
             </motion.div>
 
             <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-foreground">
-              Nikmati Cita Rasa <span className="text-gradient">Istimewa</span> di Setiap Suapanmu
+              Kuliner Rice Bowl, <span className="text-gradient">Taiwan Chicken</span> & Dimsum Goreng di Makassar
             </h1>
 
-            <p className="text-lg text-muted-foreground max-w-xl mx-auto lg:mx-0">Rice Bowl, Makanan Taiwan, dan Dimsum pilihan dengan bahan segar berkualitas. Pesan sekarang dan rasakan kelezatannya!</p>
+            <p className="text-lg text-muted-foreground max-w-xl mx-auto lg:mx-0">
+              Pilihan kuliner street food favorit di Makassar dengan bahan segar berkualitas. Nikmati kelezatan Rice Bowl ayam krispi, Taiwan crispy chicken, dimsum goreng keju lumer, dan kulit crispy. Pesan via WhatsApp atau kunjungi outlet Jl. Kerung-Kerung & Jl. Pongtiku Makassar!
+            </p>
 
             <div className="flex flex-col sm:flex-row gap-6 justify-center lg:justify-start relative z-10 pointer-events-auto">
               {/* WhatsApp */}
@@ -68,7 +70,7 @@ export const HeroSection = () => {
               {/* Main Image Container */}
               <div className="absolute inset-0 rounded-full bg-gradient-warm opacity-20 blur-3xl animate-pulse-glow" />
               <motion.div animate={{ y: [0, -10, 0] }} transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }} className="relative z-10">
-                <img src={heroFood} alt="Makanan lezat dari Agang.id - Rice Bowl, Taiwan, Dimsum" className="w-full h-full object-cover rounded-3xl shadow-2xl" />
+                <img src={heroFood} alt="Kuliner Rice Bowl, Taiwan Chicken & Dimsum Goreng Agang.id Makassar" className="w-full h-full object-cover rounded-3xl shadow-2xl" />
               </motion.div>
             </div>
           </motion.div>
