@@ -47,7 +47,7 @@ export const Navbar = () => {
             </Link>
 
             {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center gap-7">
+            <div className="hidden md:flex items-center gap-8">
               {navLinks.map((link) => {
                 const active = isActive(link.path);
                 return (
@@ -61,40 +61,24 @@ export const Navbar = () => {
                   </Link>
                 );
               })}
-
-              {/* Dedicated Keranjang Link in Navigation */}
-              <button
-                type="button"
-                onClick={() => setIsCartOpen(true)}
-                className="relative font-semibold text-sm text-slate-700 hover:text-red-600 transition-colors flex items-center gap-1.5 cursor-pointer py-1"
-                title="Buka Menu Keranjang"
-              >
-                <span>Keranjang</span>
-                <span className={`min-w-[18px] h-[18px] px-1 rounded-full text-[10px] font-black flex items-center justify-center ${
-                  totalItems > 0 ? 'bg-red-600 text-white animate-bounce' : 'bg-slate-200 text-slate-600'
-                }`}>
-                  {totalItems}
-                </span>
-              </button>
             </div>
 
             {/* Desktop Actions */}
             <div className="hidden md:flex items-center gap-3">
-              {/* Cart Button */}
+              {/* Cart Icon Button (Clean icon only) */}
               <button
                 type="button"
                 onClick={() => setIsCartOpen(true)}
-                className="relative flex items-center gap-2 px-3.5 py-2 rounded-full text-slate-800 hover:text-red-600 hover:bg-red-50 transition-all border border-slate-300 font-bold text-xs shadow-sm active:scale-95 bg-slate-50 cursor-pointer"
-                title="Buka Keranjang Belanja"
-                aria-label="Buka Keranjang Belanja"
+                className="relative p-2.5 rounded-full text-slate-800 hover:text-red-600 hover:bg-red-50 transition-colors border border-slate-200 cursor-pointer"
+                title="Keranjang Belanja"
+                aria-label="Keranjang Belanja"
               >
-                <ShoppingBag size={17} className="text-red-600" />
-                <span>Keranjang</span>
-                <span className={`min-w-[20px] h-5 px-1.5 rounded-full text-[10px] font-black flex items-center justify-center shadow-sm ${
-                  totalItems > 0 ? 'bg-red-600 text-white' : 'bg-slate-200 text-slate-700'
-                }`}>
-                  {totalItems}
-                </span>
+                <ShoppingBag size={20} />
+                {totalItems > 0 && (
+                  <span className="absolute -top-1.5 -right-1.5 min-w-[20px] h-5 px-1 rounded-full bg-red-600 text-white text-[10px] font-black flex items-center justify-center shadow-md animate-bounce">
+                    {totalItems}
+                  </span>
+                )}
               </button>
 
               <button
@@ -113,12 +97,16 @@ export const Navbar = () => {
               <button
                 type="button"
                 onClick={() => setIsCartOpen(true)}
-                className="relative flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-red-50 text-red-700 border border-red-200 font-bold text-xs active:scale-95"
-                title="Buka Keranjang Belanja"
-                aria-label="Buka Keranjang Belanja"
+                className="relative p-2 rounded-xl text-slate-800 hover:text-red-600 hover:bg-slate-100 transition-colors cursor-pointer"
+                title="Keranjang Belanja"
+                aria-label="Keranjang Belanja"
               >
-                <ShoppingBag size={18} />
-                <span className="font-extrabold">{totalItems > 0 ? totalItems : '0'}</span>
+                <ShoppingBag size={22} />
+                {totalItems > 0 && (
+                  <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-red-600 text-white text-[9px] font-black flex items-center justify-center shadow">
+                    {totalItems}
+                  </span>
+                )}
               </button>
 
               <button className="p-2 text-slate-800" onClick={() => setIsOpen(!isOpen)} aria-label="Toggle menu">
