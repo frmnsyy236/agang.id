@@ -17,6 +17,7 @@ import Products from './pages/Products';
 import BlogPost from './pages/BlogPost';
 import BlogDetail from './pages/BlogDetail';
 import AdminBlog from './pages/AdminBlog';
+import CartPage from './pages/CartPage';
 import NotFound from './pages/NotFound';
 
 const queryClient = new QueryClient();
@@ -39,6 +40,8 @@ const App = () => (
                   <Route path="/products" element={<Products />} />
                   <Route path="/Products" element={<Products />} />
                   <Route path="/menu" element={<Products />} />
+                  <Route path="/cart" element={<CartPage />} />
+                  <Route path="/keranjang" element={<CartPage />} />
                   <Route path="/blog" element={<BlogPost />} />
                   <Route path="/BlogPost" element={<BlogPost />} />
                   <Route path="/blog/:slug" element={<BlogDetail />} />

@@ -47,7 +47,7 @@ export const Navbar = () => {
             </Link>
 
             {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center gap-8">
+            <div className="hidden md:flex items-center gap-7">
               {navLinks.map((link) => {
                 const active = isActive(link.path);
                 return (
@@ -61,6 +61,21 @@ export const Navbar = () => {
                   </Link>
                 );
               })}
+
+              {/* Dedicated Keranjang Link in Navigation */}
+              <button
+                type="button"
+                onClick={() => setIsCartOpen(true)}
+                className="relative font-semibold text-sm text-slate-700 hover:text-red-600 transition-colors flex items-center gap-1.5 cursor-pointer py-1"
+                title="Buka Menu Keranjang"
+              >
+                <span>Keranjang</span>
+                <span className={`min-w-[18px] h-[18px] px-1 rounded-full text-[10px] font-black flex items-center justify-center ${
+                  totalItems > 0 ? 'bg-red-600 text-white animate-bounce' : 'bg-slate-200 text-slate-600'
+                }`}>
+                  {totalItems}
+                </span>
+              </button>
             </div>
 
             {/* Desktop Actions */}
@@ -69,38 +84,28 @@ export const Navbar = () => {
               <button
                 type="button"
                 onClick={() => setIsCartOpen(true)}
-                className="relative p-2.5 rounded-full text-slate-800 hover:text-red-600 hover:bg-red-50 transition-colors border border-slate-200"
+                className="relative flex items-center gap-2 px-3.5 py-2 rounded-full text-slate-800 hover:text-red-600 hover:bg-red-50 transition-all border border-slate-300 font-bold text-xs shadow-sm active:scale-95 bg-slate-50 cursor-pointer"
                 title="Buka Keranjang Belanja"
                 aria-label="Buka Keranjang Belanja"
               >
-                <ShoppingBag size={20} />
-                {totalItems > 0 && (
-                  <span className="absolute -top-1.5 -right-1.5 min-w-[20px] h-5 px-1 rounded-full bg-red-600 text-white text-[10px] font-black flex items-center justify-center shadow-md animate-bounce">
-                    {totalItems}
-                  </span>
-                )}
+                <ShoppingBag size={17} className="text-red-600" />
+                <span>Keranjang</span>
+                <span className={`min-w-[20px] h-5 px-1.5 rounded-full text-[10px] font-black flex items-center justify-center shadow-sm ${
+                  totalItems > 0 ? 'bg-red-600 text-white' : 'bg-slate-200 text-slate-700'
+                }`}>
+                  {totalItems}
+                </span>
               </button>
 
-              <Button
-                variant="whatsapp"
-                className="rounded-full px-5 py-2.5 bg-green-600 hover:bg-green-700 text-white font-bold text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition-all flex items-center gap-2 active:scale-95"
-                asChild
+              <button
+                type="button"
+                onClick={() => setIsCartOpen(true)}
+                className="rounded-full px-5 py-2.5 bg-green-600 hover:bg-green-700 text-white font-bold text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition-all flex items-center gap-2 active:scale-95 cursor-pointer"
+                title={totalItems > 0 ? 'Lanjut ke Checkout Pesanan' : 'Buka Keranjang & Order'}
               >
-                <a
-                  href={totalItems > 0 ? '#cart' : `https://wa.me/6281919491455?text=${encodeURIComponent('Halo Agang.id! Saya ingin memesan makanan.')}`}
-                  target={totalItems > 0 ? undefined : '_blank'}
-                  rel={totalItems > 0 ? undefined : 'noopener noreferrer'}
-                  onClick={(e) => {
-                    if (totalItems > 0) {
-                      e.preventDefault();
-                      setIsCartOpen(true);
-                    }
-                  }}
-                >
-                  <MessageCircle size={16} />
-                  <span>{totalItems > 0 ? `Checkout (${totalItems})` : 'Order Sekarang'}</span>
-                </a>
-              </Button>
+                <MessageCircle size={16} />
+                <span>{totalItems > 0 ? `Checkout (${totalItems})` : 'Order Sekarang'}</span>
+              </button>
             </div>
 
             {/* Mobile Actions */}
@@ -108,16 +113,12 @@ export const Navbar = () => {
               <button
                 type="button"
                 onClick={() => setIsCartOpen(true)}
-                className="relative p-2 rounded-xl text-slate-800 hover:text-red-600 hover:bg-slate-100 transition-colors"
+                className="relative flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-red-50 text-red-700 border border-red-200 font-bold text-xs active:scale-95"
                 title="Buka Keranjang Belanja"
                 aria-label="Buka Keranjang Belanja"
               >
-                <ShoppingBag size={22} />
-                {totalItems > 0 && (
-                  <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-red-600 text-white text-[9px] font-black flex items-center justify-center shadow">
-                    {totalItems}
-                  </span>
-                )}
+                <ShoppingBag size={18} />
+                <span className="font-extrabold">{totalItems > 0 ? totalItems : '0'}</span>
               </button>
 
               <button className="p-2 text-slate-800" onClick={() => setIsOpen(!isOpen)} aria-label="Toggle menu">
@@ -151,40 +152,28 @@ export const Navbar = () => {
                   setIsOpen(false);
                   setIsCartOpen(true);
                 }}
-                className="w-full py-3 px-4 rounded-xl bg-amber-400 hover:bg-amber-300 text-red-950 font-black text-xs flex items-center justify-between shadow-md"
+                className="w-full py-3.5 px-4 rounded-xl bg-amber-400 hover:bg-amber-300 text-red-950 font-black text-sm flex items-center justify-between shadow-md active:scale-95"
               >
-                <span className="flex items-center gap-2">
-                  <ShoppingBag size={17} />
+                <span className="flex items-center gap-2.5">
+                  <ShoppingBag size={19} className="text-red-700" />
                   <span>Buka Keranjang Belanja</span>
                 </span>
-                <span className="bg-red-700 text-white px-2 py-0.5 rounded-full text-[10px] font-black">
+                <span className="bg-red-700 text-white px-2.5 py-0.5 rounded-full text-xs font-black shadow-sm">
                   {totalItems} item
                 </span>
               </button>
 
-              <Button
-                variant="whatsapp"
-                className="w-full rounded-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 shadow-md flex items-center justify-center gap-2"
-                asChild
+              <button
+                type="button"
+                onClick={() => {
+                  setIsOpen(false);
+                  setIsCartOpen(true);
+                }}
+                className="w-full rounded-full bg-green-600 hover:bg-green-700 text-white font-bold py-3.5 shadow-md flex items-center justify-center gap-2 active:scale-95 text-sm"
               >
-                <a
-                  href={totalItems > 0 ? '#cart' : `https://wa.me/6281919491455?text=${encodeURIComponent('Halo Agang.id! Saya ingin memesan makanan.')}`}
-                  target={totalItems > 0 ? undefined : '_blank'}
-                  rel={totalItems > 0 ? undefined : 'noopener noreferrer'}
-                  onClick={(e) => {
-                    if (totalItems > 0) {
-                      e.preventDefault();
-                      setIsOpen(false);
-                      setIsCartOpen(true);
-                    } else {
-                      setIsOpen(false);
-                    }
-                  }}
-                >
-                  <MessageCircle size={18} />
-                  <span>{totalItems > 0 ? `Checkout (${totalItems} Menu)` : 'Order Sekarang via WhatsApp'}</span>
-                </a>
-              </Button>
+                <MessageCircle size={18} />
+                <span>{totalItems > 0 ? `Checkout (${totalItems} Menu)` : 'Order Sekarang'}</span>
+              </button>
             </div>
           </motion.div>
         )}

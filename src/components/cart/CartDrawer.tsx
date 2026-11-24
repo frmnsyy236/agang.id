@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCart } from '@/context/CartContext';
 import { formatPrice } from '@/data/menuData';
@@ -18,13 +19,13 @@ import {
   Wallet,
   CheckCircle2,
   AlertCircle,
-  Motorbike,
   Store,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 
 export const CartDrawer: React.FC = () => {
+  const navigate = useNavigate();
   const {
     items,
     totalItems,
@@ -94,24 +95,24 @@ export const CartDrawer: React.FC = () => {
   return (
     <AnimatePresence>
       {isCartOpen && (
-        <div className="fixed inset-0 z-50 overflow-hidden">
+        <div className="fixed inset-0 z-[99999] overflow-hidden">
           {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setIsCartOpen(false)}
-            className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm cursor-pointer"
           />
 
           {/* Drawer Panel */}
-          <div className="fixed inset-y-0 right-0 max-w-full flex pl-10">
+          <div className="fixed inset-y-0 right-0 max-w-full flex">
             <motion.div
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 220 }}
-              className="w-screen max-w-md bg-[#520909] text-white border-l border-white/15 shadow-2xl flex flex-col justify-between"
+              className="w-screen max-w-md bg-[#520909] text-white border-l border-white/15 shadow-2xl flex flex-col justify-between relative z-10"
             >
               {/* Header */}
               <div className="p-5 border-b border-white/10 flex items-center justify-between bg-[#400707]">
@@ -157,10 +158,13 @@ export const CartDrawer: React.FC = () => {
                     </div>
                     <Button
                       size="sm"
-                      onClick={() => setIsCartOpen(false)}
-                      className="rounded-full bg-amber-400 hover:bg-amber-300 text-red-950 font-extrabold text-xs px-6"
+                      onClick={() => {
+                        setIsCartOpen(false);
+                        navigate('/products');
+                      }}
+                      className="rounded-full bg-amber-400 hover:bg-amber-300 text-red-950 font-extrabold text-xs px-6 shadow-lg active:scale-95"
                     >
-                      Buka Menu
+                      Lihat & Pesan Menu Sekarang
                     </Button>
                   </div>
                 ) : step === 1 ? (
