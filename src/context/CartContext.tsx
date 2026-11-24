@@ -5,6 +5,12 @@ import { formatPrice } from '@/data/menuData';
 import { supabase } from '@/lib/supabase';
 import { toast } from 'sonner';
 
+export interface OrderSubmitResult {
+  success: boolean;
+  waUrl: string;
+  orderId: string;
+}
+
 interface CartContextType {
   items: CartItem[];
   totalItems: number;
@@ -16,14 +22,34 @@ interface CartContextType {
   removeFromCart: (id: string) => void;
   clearCart: () => void;
   orders: OrderRecord[];
-  submitOrder: (customer: OrderCustomerData) => Promise<boolean>;
+  submitOrder: (customer: OrderCustomerData) => Promise<OrderSubmitResult | null>;
+  sendQuickOrderToWhatsApp: (notes?: string) => OrderSubmitResult | null;
   updateOrderStatus: (orderId: string, status: OrderRecord['status']) => Promise<void>;
   deleteOrder: (orderId: string) => Promise<void>;
 }
 
 const CART_STORAGE_KEY = 'agang_cart_items_v1';
 const ORDERS_STORAGE_KEY = 'agang_orders_history_v1';
-const WHATSAPP_NUMBER = '6281919491455';
+export const WHATSAPP_NUMBER = '6281919491455';
+
+export const redirectToWhatsApp = (waUrl: string) => {
+  if (typeof window === 'undefined') return;
+
+  const isMobile =
+    typeof navigator !== 'undefined' &&
+    /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+  if (isMobile) {
+    window.location.href = waUrl;
+  } else {
+    // Attempt window.open for desktop
+    const win = window.open(waUrl, '_blank');
+    // If browser popup blocker blocked the popup, fallback immediately to location.href!
+    if (!win || win.closed || typeof win.closed === 'undefined') {
+      window.location.href = waUrl;
+    }
+  }
+};
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
@@ -70,35 +96,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, [orders]);
 
-  // Load orders from Supabase on mount
-  useEffect(() => {
-    const fetchCloudOrders = async () => {
-      try {
-        const { data, error } = await supabase
-          .from('orders')
-          .select('*')
-          .order('created_at', { ascending: false });
-
-        if (!error && data && data.length > 0) {
-          const mapped: OrderRecord[] = data.map((row: any) => ({
-            id: row.id,
-            customer: row.customer_data || row.customer,
-            items: row.items || [],
-            totalAmount: Number(row.total_amount) || 0,
-            status: row.status || 'pending',
-            createdAt: row.created_at,
-          }));
-          setOrders(mapped);
-        }
-      } catch (err) {
-        console.warn('Could not sync orders from Supabase:', err);
-      }
-    };
-
-    fetchCloudOrders();
-  }, []);
-
-  // Compute totals
+  // Totals calculation
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
   const totalPrice = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
@@ -107,10 +105,13 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setItems((prev) => {
       const existingIndex = prev.findIndex((i) => i.id === item.id);
       if (existingIndex > -1) {
-        const copy = [...prev];
-        copy[existingIndex].quantity += qty;
-        if (notes) copy[existingIndex].notes = notes;
-        return copy;
+        const next = [...prev];
+        next[existingIndex] = {
+          ...next[existingIndex],
+          quantity: next[existingIndex].quantity + qty,
+          notes: notes !== undefined ? notes : next[existingIndex].notes,
+        };
+        return next;
       }
       return [
         ...prev,
@@ -126,8 +127,8 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       ];
     });
 
-    toast.success(`"${item.name}" dimasukkan ke keranjang!`, {
-      description: 'Klik ikon keranjang untuk melihat atau checkout pesanan.',
+    toast.success(`${item.name} ditambahkan ke keranjang!`, {
+      description: 'Klik ikon keranjang di atas untuk melanjutkan pemesanan via WhatsApp.',
     });
   };
 
@@ -157,15 +158,20 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setItems([]);
   };
 
-  // Submit order & send to WhatsApp
-  const submitOrder = async (customer: OrderCustomerData): Promise<boolean> => {
+  // Submit full order & send to WhatsApp
+  const submitOrder = async (customer: OrderCustomerData): Promise<OrderSubmitResult | null> => {
     if (items.length === 0) {
       toast.error('Keranjang belanja Anda masih kosong.');
-      return false;
+      return null;
     }
 
     const orderId = `AG-${Date.now().toString().slice(-6)}`;
-    const shippingFee = customer.deliveryType === 'delivery' ? (customer.shippingFee !== undefined ? customer.shippingFee : 7000) : 0;
+    const shippingFee =
+      customer.deliveryType === 'delivery'
+        ? customer.shippingFee !== undefined
+          ? customer.shippingFee
+          : 7000
+        : 0;
     const grandTotal = totalPrice + shippingFee;
 
     const newOrder: OrderRecord = {
@@ -199,7 +205,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         : 'Tunai / Bayar di Tempat (COD)';
 
     let itemsList = '';
-    items.forEach((item, idx) => {
+    items.forEach((item) => {
       const subtotal = formatPrice(item.price * item.quantity);
       itemsList += `• ${item.quantity}x ${item.name} (${subtotal})\n`;
       if (item.notes) {
@@ -218,7 +224,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (customer.landmark) {
         message += `🏢 *Patokan Lokasi:* ${customer.landmark}\n`;
       }
-      message += `📏 *Jarak / Radius:* ${customer.deliveryZone || 'Radius <= 3 km (Rp7.000)'}\n`;
+      message += `📏 *Jarak / Radius:* ${customer.deliveryZone || 'Radius ≤ 3 km (Rp7.000)'}\n`;
     }
     message += `🏬 *Pilihan Outlet:* ${outletName}\n`;
     message += `💳 *Metode Pembayaran:* ${paymentLabel}\n`;
@@ -239,7 +245,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // Save to local state
     setOrders((prev) => [newOrder, ...prev]);
 
-    // Save to Supabase (in background so it doesn't delay or block opening WhatsApp)
+    // Save to Supabase (in background)
     supabase
       .from('orders')
       .insert([
@@ -255,27 +261,72 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       .then(() => {})
       .catch((e) => console.warn('Supabase offline or orders table missing:', e));
 
-    // Open WhatsApp (Reliable for both mobile and desktop)
     const encoded = encodeURIComponent(message);
     const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encoded}`;
 
-    // Clean up cart before redirection
-    clearCart();
-    setIsCartOpen(false);
-
-    toast.success('Membuka WhatsApp Business Agang.id...', {
-      description: `Nomor pesanan: #${orderId}. Mohon tekan tombol KIRIM di WhatsApp.`,
+    toast.success('Mengarahkan ke WhatsApp Business...', {
+      description: `Pesanan #${orderId} siap dikirim. Mohon tekan tombol KIRIM di WhatsApp.`,
       duration: 5000,
     });
 
-    const isMobile = typeof navigator !== 'undefined' && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-    if (isMobile) {
-      window.location.href = waUrl;
-    } else {
-      window.open(waUrl, '_blank');
+    // Clear items in cart
+    clearCart();
+
+    // Trigger fail-safe redirect
+    redirectToWhatsApp(waUrl);
+
+    return {
+      success: true,
+      waUrl,
+      orderId,
+    };
+  };
+
+  // Quick order straight to WhatsApp without filling the full form
+  const sendQuickOrderToWhatsApp = (quickNotes?: string): OrderSubmitResult | null => {
+    if (items.length === 0) {
+      toast.error('Keranjang belanja Anda masih kosong.');
+      return null;
     }
 
-    return true;
+    const orderId = `AG-${Date.now().toString().slice(-6)}`;
+    let itemsList = '';
+    items.forEach((item) => {
+      const subtotal = formatPrice(item.price * item.quantity);
+      itemsList += `• ${item.quantity}x ${item.name} (${subtotal})\n`;
+      if (item.notes) {
+        itemsList += `   _Catatan: ${item.notes}_\n`;
+      }
+    });
+
+    let message = `*PESANAN BARU - AGANG.ID* 🍽️\n`;
+    message += `No. Pesanan: *#${orderId}*\n`;
+    message += `-----------------------------------------\n`;
+    message += `*RINCIAN MENU:*\n${itemsList}`;
+    message += `-----------------------------------------\n`;
+    message += `💰 *Subtotal Menu:* *${formatPrice(totalPrice)}*\n`;
+    if (quickNotes) {
+      message += `📝 Catatan: ${quickNotes}\n`;
+    }
+    message += `-----------------------------------------\n`;
+    message += `Halo kasir Agang.id! Saya ingin pesan menu di atas via website. Mohon info ongkir dan konfirmasi ketersediaannya ya. Terima kasih! 🙏`;
+
+    const encoded = encodeURIComponent(message);
+    const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encoded}`;
+
+    toast.success('Mengarahkan ke WhatsApp Kasir...', {
+      description: `Nomor pesanan #${orderId}. Mohon kirimkan pesan di WhatsApp.`,
+      duration: 5000,
+    });
+
+    clearCart();
+    redirectToWhatsApp(waUrl);
+
+    return {
+      success: true,
+      waUrl,
+      orderId,
+    };
   };
 
   // Update order status (for admin)
@@ -320,6 +371,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         clearCart,
         orders,
         submitOrder,
+        sendQuickOrderToWhatsApp,
         updateOrderStatus,
         deleteOrder,
       }}

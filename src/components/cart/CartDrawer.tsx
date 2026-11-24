@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useCart } from '@/context/CartContext';
+import { useCart, OrderSubmitResult } from '@/context/CartContext';
 import { formatPrice } from '@/data/menuData';
 import { OrderCustomerData } from '@/types/cart';
 import {
@@ -15,10 +15,10 @@ import {
   MessageCircle,
   Clock,
   Store,
-  MapPin,
-  Check,
   Bike,
-  Sparkles,
+  CheckCircle2,
+  ExternalLink,
+  Zap,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
@@ -62,10 +62,12 @@ export const CartDrawer: React.FC = () => {
     removeFromCart,
     clearCart,
     submitOrder,
+    sendQuickOrderToWhatsApp,
   } = useCart();
 
-  // Wizard Step: 1 = Review Items, 2 = Customer Form
-  const [step, setStep] = useState<1 | 2>(1);
+  // Wizard Step: 1 = Review Items, 2 = Customer Form, 3 = WhatsApp Success/Redirect State
+  const [step, setStep] = useState<1 | 2 | 3>(1);
+  const [orderResult, setOrderResult] = useState<OrderSubmitResult | null>(null);
 
   // Form State
   const [customerData, setCustomerData] = useState<OrderCustomerData>({
@@ -114,6 +116,7 @@ export const CartDrawer: React.FC = () => {
     }
   };
 
+  // Submit complete order with address & radius calculation
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -134,14 +137,36 @@ export const CartDrawer: React.FC = () => {
 
     setIsSubmitting(true);
     try {
-      const ok = await submitOrder(customerData);
-      if (ok) {
-        setStep(1);
+      const res = await submitOrder(customerData);
+      if (res && res.success) {
+        setOrderResult(res);
+        setStep(3);
       }
     } catch (err: any) {
       toast.error('Gagal mengirim pesanan: ' + err.message);
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  // Quick order directly to WhatsApp from cart without form
+  const handleQuickOrder = () => {
+    if (items.length === 0) {
+      toast.error('Keranjang belanja Anda masih kosong.');
+      return;
+    }
+    const res = sendQuickOrderToWhatsApp();
+    if (res && res.success) {
+      setOrderResult(res);
+      setStep(3);
+    }
+  };
+
+  const handleClose = () => {
+    setIsCartOpen(false);
+    if (step === 3) {
+      setStep(1);
+      setOrderResult(null);
     }
   };
 
@@ -155,12 +180,12 @@ export const CartDrawer: React.FC = () => {
     <AnimatePresence>
       {isCartOpen && (
         <div className="fixed inset-0 z-[99999] overflow-hidden">
-          {/* Backdrop with smooth blur */}
+          {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() => setIsCartOpen(false)}
+            onClick={handleClose}
             className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm cursor-pointer"
           />
 
@@ -181,19 +206,25 @@ export const CartDrawer: React.FC = () => {
                   </div>
                   <div>
                     <h3 className="font-display text-base font-bold text-slate-900">
-                      {step === 1 ? 'Keranjang Menu' : 'Informasi Pesanan'}
+                      {step === 1
+                        ? 'Keranjang Menu'
+                        : step === 2
+                        ? 'Informasi Pengiriman'
+                        : 'Menghubungkan ke WhatsApp'}
                     </h3>
                     <p className="text-xs text-slate-500">
                       {step === 1
                         ? `${totalItems} menu dipilih`
-                        : 'Langkah 2 dari 2: Konfirmasi Data'}
+                        : step === 2
+                        ? 'Langkah 2 dari 2: Data Pemesan & Ongkir'
+                        : 'Pesanan telah siap dikirimkan'}
                     </p>
                   </div>
                 </div>
 
                 <button
                   type="button"
-                  onClick={() => setIsCartOpen(false)}
+                  onClick={handleClose}
                   className="p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
                   aria-label="Tutup Keranjang"
                 >
@@ -201,9 +232,9 @@ export const CartDrawer: React.FC = () => {
                 </button>
               </div>
 
-              {/* Body */}
+              {/* Body Content */}
               <div className="flex-1 overflow-y-auto p-5 space-y-4 bg-slate-50/50">
-                {items.length === 0 ? (
+                {items.length === 0 && step !== 3 ? (
                   <div className="h-full flex flex-col items-center justify-center text-center py-16 space-y-4">
                     <div className="w-20 h-20 rounded-full bg-slate-100 flex items-center justify-center text-slate-400">
                       <ShoppingBag size={36} />
@@ -314,9 +345,9 @@ export const CartDrawer: React.FC = () => {
                       </div>
                     </div>
                   </div>
-                ) : (
+                ) : step === 2 ? (
                   /* ========================================================
-                     STEP 2: FORM DATA PEMESAN (RAPIIH, BERSIH, NYAMAN DI MATA)
+                     STEP 2: FORM DATA PEMESAN (RAPIIH & BERSIH)
                      ======================================================== */
                   <form id="checkout-form" onSubmit={handleSubmit} className="space-y-4">
                     {/* Back Button */}
@@ -556,31 +587,95 @@ export const CartDrawer: React.FC = () => {
                       </div>
                     </div>
                   </form>
+                ) : (
+                  /* ========================================================
+                     STEP 3: SUCCESS / DIRECT WHATSAPP HANDOFF SCREEN
+                     ======================================================== */
+                  <div className="py-6 px-2 text-center space-y-5">
+                    <div className="w-16 h-16 rounded-3xl bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto shadow-md">
+                      <CheckCircle2 size={36} />
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <h4 className="font-display text-lg font-black text-slate-900">
+                        Pesanan Siap Dikirim!
+                      </h4>
+                      <p className="text-xs text-slate-600 max-w-xs mx-auto">
+                        Nomor Tiket Pesanan: <strong className="font-mono text-emerald-700">#{orderResult?.orderId}</strong>
+                      </p>
+                      <p className="text-xs text-slate-500 leading-relaxed max-w-xs mx-auto pt-1">
+                        Sistem sedang mengarahkan Anda ke WhatsApp kasir Agang.id agar Anda dapat langsung berkomunikasi dan konfirmasi pesanan.
+                      </p>
+                    </div>
+
+                    {orderResult?.waUrl && (
+                      <div className="pt-2 space-y-3">
+                        <a
+                          href={orderResult.waUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-full rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-sm uppercase tracking-wider shadow-xl flex items-center justify-center gap-2 py-4 active:scale-95 transition-all cursor-pointer"
+                        >
+                          <MessageCircle size={20} />
+                          <span>Buka Chat WhatsApp Sekarang</span>
+                          <ExternalLink size={16} />
+                        </a>
+
+                        <p className="text-[11px] text-slate-500 leading-tight">
+                          💡 Jika WhatsApp tidak terbuka otomatis, silakan klik tombol hijau di atas. Jangan lupa tekan <strong>KIRIM (Send)</strong> di chat WhatsApp!
+                        </p>
+                      </div>
+                    )}
+
+                    <div className="pt-4 border-t border-slate-200">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={handleClose}
+                        className="text-xs text-slate-500 hover:text-slate-800 font-semibold"
+                      >
+                        Selesai & Kembali ke Menu
+                      </Button>
+                    </div>
+                  </div>
                 )}
               </div>
 
-              {/* Sticky Footer */}
-              {items.length > 0 && (
+              {/* Sticky Footer (Hanya muncul jika di Step 1 atau 2 dan ada items) */}
+              {items.length > 0 && step !== 3 && (
                 <div className="p-4 sm:p-5 border-t border-slate-200 bg-white space-y-3 sticky bottom-0 z-20 shadow-[0_-4px_12px_rgba(0,0,0,0.05)]">
                   {step === 1 ? (
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <span className="text-[11px] text-slate-500 uppercase tracking-wider font-semibold block">
-                          Subtotal Menu ({totalItems})
-                        </span>
-                        <span className="font-display text-xl font-black text-slate-900">
-                          {formatPrice(totalPrice)}
-                        </span>
+                    <div className="space-y-2.5">
+                      <div className="flex items-center justify-between pb-1">
+                        <div>
+                          <span className="text-[11px] text-slate-500 uppercase tracking-wider font-semibold block">
+                            Subtotal Menu ({totalItems})
+                          </span>
+                          <span className="font-display text-xl font-black text-slate-900">
+                            {formatPrice(totalPrice)}
+                          </span>
+                        </div>
+
+                        {/* Primary Button: Lanjut Isi Form Alamat & Ongkir */}
+                        <Button
+                          size="lg"
+                          onClick={handleNextStep}
+                          className="rounded-2xl bg-red-700 hover:bg-red-800 text-white font-extrabold text-xs uppercase tracking-wider shadow-md flex items-center justify-center gap-2 px-5 py-3 active:scale-95 transition-all"
+                        >
+                          <span>Lanjut Isi Data & Ongkir</span>
+                          <ArrowRight size={16} />
+                        </Button>
                       </div>
 
-                      <Button
-                        size="lg"
-                        onClick={handleNextStep}
-                        className="rounded-2xl bg-red-700 hover:bg-red-800 text-white font-extrabold text-xs uppercase tracking-wider shadow-md flex items-center justify-center gap-2 px-5 py-3 active:scale-95 transition-all"
+                      {/* Alternative Button: Pesan Cepat Langsung ke WhatsApp */}
+                      <button
+                        type="button"
+                        onClick={handleQuickOrder}
+                        className="w-full py-2.5 px-3 rounded-xl border border-emerald-500/50 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-bold flex items-center justify-center gap-1.5 transition-all active:scale-98"
                       >
-                        <span>Lanjut ke Data Pemesan</span>
-                        <ArrowRight size={16} />
-                      </Button>
+                        <Zap size={14} className="text-emerald-600 fill-emerald-600" />
+                        <span>Atau Langsung Chat WA Kasir (Tanpa Isi Form)</span>
+                      </button>
                     </div>
                   ) : (
                     <div className="space-y-3">
@@ -633,12 +728,12 @@ export const CartDrawer: React.FC = () => {
                           <MessageCircle size={18} />
                           <span>
                             {isSubmitting
-                              ? 'Menyiapkan Pesanan...'
+                              ? 'Menghubungkan ke WhatsApp...'
                               : 'Kirim Pesanan ke WhatsApp'}
                           </span>
                         </Button>
                         <p className="text-[10px] text-center text-slate-500 mt-1.5 leading-tight">
-                          Pesanan akan otomatis terhubung ke WhatsApp kasir Agang.id
+                          Otomatis membuka WhatsApp kasir Agang.id untuk konfirmasi pesanan
                         </p>
                       </div>
                     </div>
