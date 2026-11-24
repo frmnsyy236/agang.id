@@ -1,7 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useCart, OrderSubmitResult } from '@/context/CartContext';
+import {
+  useCart,
+  OrderSubmitResult,
+  buildWhatsAppMessage,
+  buildQuickWhatsAppMessage,
+  buildWhatsAppUrl,
+  redirectToWhatsApp,
+} from '@/context/CartContext';
 import { formatPrice } from '@/data/menuData';
 import { OrderCustomerData } from '@/types/cart';
 import {
@@ -65,9 +72,14 @@ export const CartDrawer: React.FC = () => {
     sendQuickOrderToWhatsApp,
   } = useCart();
 
-  // Wizard Step: 1 = Review Items, 2 = Customer Form, 3 = WhatsApp Success/Redirect State
+  // Wizard Step: 1 = Review Items, 2 = Customer Form, 3 = Success / WhatsApp Handoff
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [orderResult, setOrderResult] = useState<OrderSubmitResult | null>(null);
+
+  // Persistent session order ID
+  const [sessionOrderId, setSessionOrderId] = useState(
+    () => `AG-${Date.now().toString().slice(-6)}`
+  );
 
   // Form State
   const [customerData, setCustomerData] = useState<OrderCustomerData>({
@@ -116,46 +128,76 @@ export const CartDrawer: React.FC = () => {
     }
   };
 
-  // Submit complete order with address & radius calculation
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const currentShippingFee =
+    customerData.deliveryType === 'delivery'
+      ? (customerData.shippingFee !== undefined ? customerData.shippingFee : 7000)
+      : 0;
+  const grandTotal = totalPrice + currentShippingFee;
 
+  // Real-time computed WhatsApp URL for Step 2
+  const currentWaUrl = useMemo(() => {
+    if (items.length === 0) return '#';
+    const message = buildWhatsAppMessage(
+      sessionOrderId,
+      customerData,
+      items,
+      totalPrice,
+      currentShippingFee,
+      grandTotal
+    );
+    return buildWhatsAppUrl(message);
+  }, [sessionOrderId, customerData, items, totalPrice, currentShippingFee, grandTotal]);
+
+  // Real-time computed WhatsApp URL for Quick Order (Step 1)
+  const quickWaUrl = useMemo(() => {
+    if (items.length === 0) return '#';
+    const message = buildQuickWhatsAppMessage(sessionOrderId, items, totalPrice);
+    return buildWhatsAppUrl(message);
+  }, [sessionOrderId, items, totalPrice]);
+
+  // Handle Full Form Checkout
+  const handleFullCheckout = async (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (!customerData.name.trim()) {
+      e.preventDefault();
       toast.error('Mohon masukkan nama pemesan.');
       return;
     }
 
     if (!customerData.phone.trim()) {
+      e.preventDefault();
       toast.error('Mohon masukkan nomor WhatsApp yang aktif.');
       return;
     }
 
     if (customerData.deliveryType === 'delivery' && !customerData.address.trim()) {
+      e.preventDefault();
       toast.error('Mohon isi alamat pengiriman lengkap.');
       return;
     }
 
     setIsSubmitting(true);
     try {
-      const res = await submitOrder(customerData);
+      const res = await submitOrder(customerData, sessionOrderId);
       if (res && res.success) {
         setOrderResult(res);
         setStep(3);
       }
     } catch (err: any) {
-      toast.error('Gagal mengirim pesanan: ' + err.message);
+      toast.error('Gagal memproses pesanan: ' + err.message);
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  // Quick order directly to WhatsApp from cart without form
-  const handleQuickOrder = () => {
+  // Handle Quick Order from Step 1
+  const handleQuickCheckout = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (items.length === 0) {
+      e.preventDefault();
       toast.error('Keranjang belanja Anda masih kosong.');
       return;
     }
-    const res = sendQuickOrderToWhatsApp();
+
+    const res = sendQuickOrderToWhatsApp(undefined, sessionOrderId);
     if (res && res.success) {
       setOrderResult(res);
       setStep(3);
@@ -167,14 +209,9 @@ export const CartDrawer: React.FC = () => {
     if (step === 3) {
       setStep(1);
       setOrderResult(null);
+      setSessionOrderId(`AG-${Date.now().toString().slice(-6)}`);
     }
   };
-
-  const currentShippingFee =
-    customerData.deliveryType === 'delivery'
-      ? (customerData.shippingFee !== undefined ? customerData.shippingFee : 7000)
-      : 0;
-  const grandTotal = totalPrice + currentShippingFee;
 
   return (
     <AnimatePresence>
@@ -216,8 +253,8 @@ export const CartDrawer: React.FC = () => {
                       {step === 1
                         ? `${totalItems} menu dipilih`
                         : step === 2
-                        ? 'Langkah 2 dari 2: Data Pemesan & Ongkir'
-                        : 'Pesanan telah siap dikirimkan'}
+                        ? 'Langkah 2: Data Pemesan & Ongkir'
+                        : 'Pesanan siap dikirimkan'}
                     </p>
                   </div>
                 </div>
@@ -349,7 +386,7 @@ export const CartDrawer: React.FC = () => {
                   /* ========================================================
                      STEP 2: FORM DATA PEMESAN (RAPIIH & BERSIH)
                      ======================================================== */
-                  <form id="checkout-form" onSubmit={handleSubmit} className="space-y-4">
+                  <div className="space-y-4">
                     {/* Back Button */}
                     <button
                       type="button"
@@ -586,10 +623,10 @@ export const CartDrawer: React.FC = () => {
                         />
                       </div>
                     </div>
-                  </form>
+                  </div>
                 ) : (
                   /* ========================================================
-                     STEP 3: SUCCESS / DIRECT WHATSAPP HANDOFF SCREEN
+                     STEP 3: SUCCESS / WHATSAPP HANDOFF SCREEN
                      ======================================================== */
                   <div className="py-6 px-2 text-center space-y-5">
                     <div className="w-16 h-16 rounded-3xl bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto shadow-md">
@@ -598,34 +635,31 @@ export const CartDrawer: React.FC = () => {
 
                     <div className="space-y-1.5">
                       <h4 className="font-display text-lg font-black text-slate-900">
-                        Pesanan Siap Dikirim!
+                        Pesanan Siap Dikirim ke WhatsApp!
                       </h4>
                       <p className="text-xs text-slate-600 max-w-xs mx-auto">
-                        Nomor Tiket Pesanan: <strong className="font-mono text-emerald-700">#{orderResult?.orderId}</strong>
+                        Nomor Tiket Pesanan: <strong className="font-mono text-emerald-700">#{orderResult?.orderId || sessionOrderId}</strong>
                       </p>
                       <p className="text-xs text-slate-500 leading-relaxed max-w-xs mx-auto pt-1">
-                        Sistem sedang mengarahkan Anda ke WhatsApp kasir Agang.id agar Anda dapat langsung berkomunikasi dan konfirmasi pesanan.
+                        Aplikasi WhatsApp sedang dibuka. Jika belum terbuka otomatis di perangkat Anda, silakan klik tombol hijau di bawah:
                       </p>
                     </div>
 
-                    {orderResult?.waUrl && (
-                      <div className="pt-2 space-y-3">
-                        <a
-                          href={orderResult.waUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="w-full rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-sm uppercase tracking-wider shadow-xl flex items-center justify-center gap-2 py-4 active:scale-95 transition-all cursor-pointer"
-                        >
-                          <MessageCircle size={20} />
-                          <span>Buka Chat WhatsApp Sekarang</span>
-                          <ExternalLink size={16} />
-                        </a>
+                    <div className="pt-2 space-y-3">
+                      <a
+                        href={orderResult?.waUrl || currentWaUrl}
+                        target="_top"
+                        className="w-full rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-sm uppercase tracking-wider shadow-xl flex items-center justify-center gap-2 py-4 active:scale-95 transition-all cursor-pointer"
+                      >
+                        <MessageCircle size={20} />
+                        <span>Buka Chat WhatsApp Sekarang</span>
+                        <ExternalLink size={16} />
+                      </a>
 
-                        <p className="text-[11px] text-slate-500 leading-tight">
-                          💡 Jika WhatsApp tidak terbuka otomatis, silakan klik tombol hijau di atas. Jangan lupa tekan <strong>KIRIM (Send)</strong> di chat WhatsApp!
-                        </p>
-                      </div>
-                    )}
+                      <p className="text-[11px] text-slate-500 leading-tight">
+                        Pastikan Anda menekan tombol <strong>KIRIM (Send)</strong> di chat WhatsApp agar pesanan masuk ke kasir!
+                      </p>
+                    </div>
 
                     <div className="pt-4 border-t border-slate-200">
                       <Button
@@ -667,15 +701,16 @@ export const CartDrawer: React.FC = () => {
                         </Button>
                       </div>
 
-                      {/* Alternative Button: Pesan Cepat Langsung ke WhatsApp */}
-                      <button
-                        type="button"
-                        onClick={handleQuickOrder}
-                        className="w-full py-2.5 px-3 rounded-xl border border-emerald-500/50 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-bold flex items-center justify-center gap-1.5 transition-all active:scale-98"
+                      {/* Native HTML Link: Pesan Cepat Langsung ke WhatsApp */}
+                      <a
+                        href={quickWaUrl}
+                        onClick={handleQuickCheckout}
+                        target="_top"
+                        className="w-full py-2.5 px-3 rounded-xl border border-emerald-500/50 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-bold flex items-center justify-center gap-1.5 transition-all active:scale-98 cursor-pointer text-center"
                       >
                         <Zap size={14} className="text-emerald-600 fill-emerald-600" />
                         <span>Atau Langsung Chat WA Kasir (Tanpa Isi Form)</span>
-                      </button>
+                      </a>
                     </div>
                   ) : (
                     <div className="space-y-3">
@@ -717,21 +752,21 @@ export const CartDrawer: React.FC = () => {
                         </div>
                       </div>
 
-                      {/* WhatsApp Button */}
+                      {/* Native HTML Link to WhatsApp: 100% UNBLOCKABLE */}
                       <div>
-                        <Button
-                          form="checkout-form"
-                          type="submit"
-                          disabled={isSubmitting}
-                          className="w-full rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-sm uppercase tracking-wider shadow-lg flex items-center justify-center gap-2 py-3.5 active:scale-95 cursor-pointer transition-all disabled:opacity-50"
+                        <a
+                          href={currentWaUrl}
+                          onClick={handleFullCheckout}
+                          target="_top"
+                          className="w-full rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-sm uppercase tracking-wider shadow-lg flex items-center justify-center gap-2 py-4 active:scale-95 cursor-pointer transition-all text-center"
                         >
-                          <MessageCircle size={18} />
+                          <MessageCircle size={20} />
                           <span>
                             {isSubmitting
                               ? 'Menghubungkan ke WhatsApp...'
                               : 'Kirim Pesanan ke WhatsApp'}
                           </span>
-                        </Button>
+                        </a>
                         <p className="text-[10px] text-center text-slate-500 mt-1.5 leading-tight">
                           Otomatis membuka WhatsApp kasir Agang.id untuk konfirmasi pesanan
                         </p>

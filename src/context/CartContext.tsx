@@ -22,8 +22,8 @@ interface CartContextType {
   removeFromCart: (id: string) => void;
   clearCart: () => void;
   orders: OrderRecord[];
-  submitOrder: (customer: OrderCustomerData) => Promise<OrderSubmitResult | null>;
-  sendQuickOrderToWhatsApp: (notes?: string) => OrderSubmitResult | null;
+  submitOrder: (customer: OrderCustomerData, customOrderId?: string) => Promise<OrderSubmitResult | null>;
+  sendQuickOrderToWhatsApp: (notes?: string, customOrderId?: string) => OrderSubmitResult | null;
   updateOrderStatus: (orderId: string, status: OrderRecord['status']) => Promise<void>;
   deleteOrder: (orderId: string) => Promise<void>;
 }
@@ -32,23 +32,115 @@ const CART_STORAGE_KEY = 'agang_cart_items_v1';
 const ORDERS_STORAGE_KEY = 'agang_orders_history_v1';
 export const WHATSAPP_NUMBER = '6281919491455';
 
+// Direct WhatsApp API URL builder
+export const buildWhatsAppUrl = (message: string): string => {
+  const encoded = encodeURIComponent(message);
+  return `https://api.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${encoded}`;
+};
+
+// Formats full checkout message
+export const buildWhatsAppMessage = (
+  orderId: string,
+  customer: OrderCustomerData,
+  items: CartItem[],
+  totalPrice: number,
+  shippingFee: number,
+  grandTotal: number
+): string => {
+  const deliveryText =
+    customer.deliveryType === 'delivery'
+      ? 'Diantar ke Alamat (Delivery)'
+      : 'Ambil Sendiri di Outlet (Pickup)';
+
+  const outletName =
+    customer.outlet === 'inpres_maccini'
+      ? 'Area SD Inpres Maccini, Makassar'
+      : 'Jl. Pongtiku (Depan Bimbel JILC), Makassar';
+
+  const paymentLabel =
+    customer.paymentMethod === 'qris'
+      ? 'QRIS (Semua E-Wallet/Mobile Banking)'
+      : customer.paymentMethod === 'transfer'
+      ? 'Transfer Bank'
+      : 'Tunai / Bayar di Tempat (COD)';
+
+  let itemsList = '';
+  items.forEach((item) => {
+    const subtotal = formatPrice(item.price * item.quantity);
+    itemsList += `• ${item.quantity}x ${item.name} (${subtotal})\n`;
+    if (item.notes) {
+      itemsList += `   _Catatan: ${item.notes}_\n`;
+    }
+  });
+
+  let message = `*PESANAN BARU - AGANG.ID* 🍽️\n`;
+  message += `No. Pesanan: *#${orderId}*\n`;
+  message += `-----------------------------------------\n`;
+  message += `👤 *Nama Pemesan:* ${customer.name}\n`;
+  message += `📱 *No. WhatsApp:* ${customer.phone}\n`;
+  message += `🛵 *Metode Layanan:* ${deliveryText}\n`;
+  if (customer.deliveryType === 'delivery') {
+    message += `📍 *Alamat Pengiriman:* ${customer.address}\n`;
+    if (customer.landmark) {
+      message += `🏢 *Patokan Lokasi:* ${customer.landmark}\n`;
+    }
+    message += `📏 *Jarak / Radius:* ${customer.deliveryZone || 'Radius ≤ 3 km (Rp7.000)'}\n`;
+  }
+  message += `🏬 *Pilihan Outlet:* ${outletName}\n`;
+  message += `💳 *Metode Pembayaran:* ${paymentLabel}\n`;
+  if (customer.notes) {
+    message += `📝 *Catatan Khusus:* ${customer.notes}\n`;
+  }
+  message += `-----------------------------------------\n`;
+  message += `*RINCIAN MENU:*\n${itemsList}`;
+  message += `-----------------------------------------\n`;
+  message += `Subtotal Menu: ${formatPrice(totalPrice)}\n`;
+  if (customer.deliveryType === 'delivery') {
+    message += `🛵 Ongkos Kirim: ${formatPrice(shippingFee)}\n`;
+  }
+  message += `💰 *TOTAL KESELURUHAN:* *${formatPrice(grandTotal)}*\n`;
+  message += `-----------------------------------------\n`;
+  message += `Halo kasir Agang.id! Mohon diproses dan konfirmasi pesanan saya ya. Terima kasih! 🙏`;
+
+  return message;
+};
+
+// Formats quick checkout message
+export const buildQuickWhatsAppMessage = (
+  orderId: string,
+  items: CartItem[],
+  totalPrice: number,
+  notes?: string
+): string => {
+  let itemsList = '';
+  items.forEach((item) => {
+    const subtotal = formatPrice(item.price * item.quantity);
+    itemsList += `• ${item.quantity}x ${item.name} (${subtotal})\n`;
+    if (item.notes) {
+      itemsList += `   _Catatan: ${item.notes}_\n`;
+    }
+  });
+
+  let message = `*PESANAN BARU - AGANG.ID* 🍽️\n`;
+  message += `No. Pesanan: *#${orderId}*\n`;
+  message += `-----------------------------------------\n`;
+  message += `*RINCIAN MENU:*\n${itemsList}`;
+  message += `-----------------------------------------\n`;
+  message += `💰 *Subtotal Menu:* *${formatPrice(totalPrice)}*\n`;
+  if (notes) {
+    message += `📝 *Catatan:* ${notes}\n`;
+  }
+  message += `-----------------------------------------\n`;
+  message += `Halo kasir Agang.id! Saya ingin pesan menu di atas via website. Mohon info ongkir dan konfirmasi ketersediaannya ya. Terima kasih! 🙏`;
+
+  return message;
+};
+
+// Direct redirection: NEVER blocked by popup blockers!
 export const redirectToWhatsApp = (waUrl: string) => {
   if (typeof window === 'undefined') return;
-
-  const isMobile =
-    typeof navigator !== 'undefined' &&
-    /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-
-  if (isMobile) {
-    window.location.href = waUrl;
-  } else {
-    // Attempt window.open for desktop
-    const win = window.open(waUrl, '_blank');
-    // If browser popup blocker blocked the popup, fallback immediately to location.href!
-    if (!win || win.closed || typeof win.closed === 'undefined') {
-      window.location.href = waUrl;
-    }
-  }
+  // Direct location navigation works universally on Android, iOS, Windows, Mac
+  window.location.href = waUrl;
 };
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -159,13 +251,16 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   // Submit full order & send to WhatsApp
-  const submitOrder = async (customer: OrderCustomerData): Promise<OrderSubmitResult | null> => {
+  const submitOrder = async (
+    customer: OrderCustomerData,
+    customOrderId?: string
+  ): Promise<OrderSubmitResult | null> => {
     if (items.length === 0) {
       toast.error('Keranjang belanja Anda masih kosong.');
       return null;
     }
 
-    const orderId = `AG-${Date.now().toString().slice(-6)}`;
+    const orderId = customOrderId || `AG-${Date.now().toString().slice(-6)}`;
     const shippingFee =
       customer.deliveryType === 'delivery'
         ? customer.shippingFee !== undefined
@@ -186,62 +281,6 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       createdAt: new Date().toISOString(),
     };
 
-    // Construct formatted WhatsApp message
-    const deliveryText =
-      customer.deliveryType === 'delivery'
-        ? `Diantar ke Alamat (Delivery)`
-        : `Ambil Sendiri di Outlet (Pickup)`;
-
-    const outletName =
-      customer.outlet === 'inpres_maccini'
-        ? 'Area SD Inpres Maccini, Makassar'
-        : 'Jl. Pongtiku (Depan Bimbel JILC), Makassar';
-
-    const paymentLabel =
-      customer.paymentMethod === 'qris'
-        ? 'QRIS (Semua E-Wallet/Mobile Banking)'
-        : customer.paymentMethod === 'transfer'
-        ? 'Transfer Bank'
-        : 'Tunai / Bayar di Tempat (COD)';
-
-    let itemsList = '';
-    items.forEach((item) => {
-      const subtotal = formatPrice(item.price * item.quantity);
-      itemsList += `• ${item.quantity}x ${item.name} (${subtotal})\n`;
-      if (item.notes) {
-        itemsList += `   _Catatan: ${item.notes}_\n`;
-      }
-    });
-
-    let message = `*PESANAN BARU - AGANG.ID* 🍽️\n`;
-    message += `No. Pesanan: *#${orderId}*\n`;
-    message += `-----------------------------------------\n`;
-    message += `👤 *Nama Pemesan:* ${customer.name}\n`;
-    message += `📱 *No. WhatsApp:* ${customer.phone}\n`;
-    message += `🛵 *Metode Layanan:* ${deliveryText}\n`;
-    if (customer.deliveryType === 'delivery') {
-      message += `📍 *Alamat Pengiriman:* ${customer.address}\n`;
-      if (customer.landmark) {
-        message += `🏢 *Patokan Lokasi:* ${customer.landmark}\n`;
-      }
-      message += `📏 *Jarak / Radius:* ${customer.deliveryZone || 'Radius ≤ 3 km (Rp7.000)'}\n`;
-    }
-    message += `🏬 *Pilihan Outlet:* ${outletName}\n`;
-    message += `💳 *Metode Pembayaran:* ${paymentLabel}\n`;
-    if (customer.notes) {
-      message += `📝 *Catatan Khusus:* ${customer.notes}\n`;
-    }
-    message += `-----------------------------------------\n`;
-    message += `*RINCIAN MENU:*\n${itemsList}`;
-    message += `-----------------------------------------\n`;
-    message += `Subtotal Menu: ${formatPrice(totalPrice)}\n`;
-    if (customer.deliveryType === 'delivery') {
-      message += `🛵 Ongkos Kirim: ${formatPrice(shippingFee)}\n`;
-    }
-    message += `💰 *TOTAL KESELURUHAN:* *${formatPrice(grandTotal)}*\n`;
-    message += `-----------------------------------------\n`;
-    message += `Halo kasir Agang.id! Mohon diproses dan konfirmasi pesanan saya ya. Terima kasih! 🙏`;
-
     // Save to local state
     setOrders((prev) => [newOrder, ...prev]);
 
@@ -261,18 +300,20 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       .then(() => {})
       .catch((e) => console.warn('Supabase offline or orders table missing:', e));
 
-    const encoded = encodeURIComponent(message);
-    const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encoded}`;
+    const message = buildWhatsAppMessage(
+      orderId,
+      customer,
+      items,
+      totalPrice,
+      shippingFee,
+      grandTotal
+    );
+    const waUrl = buildWhatsAppUrl(message);
 
-    toast.success('Mengarahkan ke WhatsApp Business...', {
-      description: `Pesanan #${orderId} siap dikirim. Mohon tekan tombol KIRIM di WhatsApp.`,
-      duration: 5000,
-    });
-
-    // Clear items in cart
+    // Clear cart
     clearCart();
 
-    // Trigger fail-safe redirect
+    // Trigger instant unblockable redirect
     redirectToWhatsApp(waUrl);
 
     return {
@@ -283,41 +324,18 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   // Quick order straight to WhatsApp without filling the full form
-  const sendQuickOrderToWhatsApp = (quickNotes?: string): OrderSubmitResult | null => {
+  const sendQuickOrderToWhatsApp = (
+    quickNotes?: string,
+    customOrderId?: string
+  ): OrderSubmitResult | null => {
     if (items.length === 0) {
       toast.error('Keranjang belanja Anda masih kosong.');
       return null;
     }
 
-    const orderId = `AG-${Date.now().toString().slice(-6)}`;
-    let itemsList = '';
-    items.forEach((item) => {
-      const subtotal = formatPrice(item.price * item.quantity);
-      itemsList += `• ${item.quantity}x ${item.name} (${subtotal})\n`;
-      if (item.notes) {
-        itemsList += `   _Catatan: ${item.notes}_\n`;
-      }
-    });
-
-    let message = `*PESANAN BARU - AGANG.ID* 🍽️\n`;
-    message += `No. Pesanan: *#${orderId}*\n`;
-    message += `-----------------------------------------\n`;
-    message += `*RINCIAN MENU:*\n${itemsList}`;
-    message += `-----------------------------------------\n`;
-    message += `💰 *Subtotal Menu:* *${formatPrice(totalPrice)}*\n`;
-    if (quickNotes) {
-      message += `📝 Catatan: ${quickNotes}\n`;
-    }
-    message += `-----------------------------------------\n`;
-    message += `Halo kasir Agang.id! Saya ingin pesan menu di atas via website. Mohon info ongkir dan konfirmasi ketersediaannya ya. Terima kasih! 🙏`;
-
-    const encoded = encodeURIComponent(message);
-    const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encoded}`;
-
-    toast.success('Mengarahkan ke WhatsApp Kasir...', {
-      description: `Nomor pesanan #${orderId}. Mohon kirimkan pesan di WhatsApp.`,
-      duration: 5000,
-    });
+    const orderId = customOrderId || `AG-${Date.now().toString().slice(-6)}`;
+    const message = buildQuickWhatsAppMessage(orderId, items, totalPrice, quickNotes);
+    const waUrl = buildWhatsAppUrl(message);
 
     clearCart();
     redirectToWhatsApp(waUrl);
