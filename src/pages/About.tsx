@@ -8,7 +8,13 @@ import aboutTeam from '@/assets/about team agang.jpg';
 const About = () => {
   const handleWhatsApp = () => {
     const message = encodeURIComponent('Halo Agang.id! Saya ingin bertanya tentang menu dan layanan.');
-    window.open(`https://wa.me/6287726993572?text=${message}`, '_blank');
+    const isMobile = typeof navigator !== 'undefined' && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    const url = `https://wa.me/6281919491455?text=${message}`;
+    if (isMobile) {
+      window.location.href = url;
+    } else {
+      window.open(url, '_blank');
+    }
   };
 
   return (
@@ -89,7 +95,7 @@ const About = () => {
                     </div>
                     <div>
                       <h3 className="font-semibold text-foreground mb-1">WhatsApp</h3>
-                      <p className="text-muted-foreground text-sm">+62 877-2699-3572</p>
+                      <p className="text-muted-foreground text-sm">+62 819-1949-1455</p>
                     </div>
                   </div>
 
@@ -99,7 +105,7 @@ const About = () => {
                     </div>
                     <div>
                       <h3 className="font-semibold text-foreground mb-1">Jam Operasional</h3>
-                      <p className="text-muted-foreground text-sm">Setiap hari, 17:00 - 23:30 WIB</p>
+                      <p className="text-muted-foreground text-sm">Setiap hari, 17:30 - 23:30 WITA</p>
                     </div>
                   </div>
 

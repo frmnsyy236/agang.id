@@ -5,7 +5,13 @@ import { Button } from '@/components/ui/button';
 export const CTASection = () => {
   const handleWhatsAppOrder = () => {
     const message = encodeURIComponent('Halo Agang.id! Saya ingin memesan makanan. Boleh lihat menu lengkapnya?');
-    window.open(`https://wa.me/6287726993572?text=${message}`, '_blank');
+    const isMobile = typeof navigator !== 'undefined' && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    const url = `https://wa.me/6281919491455?text=${message}`;
+    if (isMobile) {
+      window.location.href = url;
+    } else {
+      window.open(url, '_blank');
+    }
   };
 
   return (

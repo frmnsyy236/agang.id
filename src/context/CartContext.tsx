@@ -23,7 +23,7 @@ interface CartContextType {
 
 const CART_STORAGE_KEY = 'agang_cart_items_v1';
 const ORDERS_STORAGE_KEY = 'agang_orders_history_v1';
-const WHATSAPP_NUMBER = '6287726993572';
+const WHATSAPP_NUMBER = '6281919491455';
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
@@ -231,9 +231,10 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // Save to local state
     setOrders((prev) => [newOrder, ...prev]);
 
-    // Save to Supabase (if available)
-    try {
-      await supabase.from('orders').insert([
+    // Save to Supabase (in background so it doesn't delay or block opening WhatsApp)
+    supabase
+      .from('orders')
+      .insert([
         {
           id: newOrder.id,
           customer_data: newOrder.customer,
@@ -242,21 +243,29 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
           status: newOrder.status,
           created_at: newOrder.createdAt,
         },
-      ]);
-    } catch (e) {
-      console.warn('Supabase offline or orders table missing:', e);
-    }
+      ])
+      .then(() => {})
+      .catch((e) => console.warn('Supabase offline or orders table missing:', e));
 
-    // Open WhatsApp
+    // Open WhatsApp (Reliable for both mobile and desktop)
     const encoded = encodeURIComponent(message);
-    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encoded}`, '_blank');
+    const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encoded}`;
 
-    // Clean up
+    // Clean up cart before redirection
     clearCart();
     setIsCartOpen(false);
-    toast.success('Pesanan berhasil dibuat & diarahkan ke WhatsApp Kasir!', {
-      description: `Nomor pesanan: #${orderId}`,
+
+    toast.success('Membuka WhatsApp Business Agang.id...', {
+      description: `Nomor pesanan: #${orderId}. Mohon tekan tombol KIRIM di WhatsApp.`,
+      duration: 5000,
     });
+
+    const isMobile = typeof navigator !== 'undefined' && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    if (isMobile) {
+      window.location.href = waUrl;
+    } else {
+      window.open(waUrl, '_blank');
+    }
 
     return true;
   };

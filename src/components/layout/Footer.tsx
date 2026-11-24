@@ -22,7 +22,7 @@ export const Footer = () => {
                 <Instagram size={20} />
               </a>
               <a
-                href="https://wa.me/6287726993572"
+                href="https://wa.me/6281919491455"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-2 rounded-full bg-white/10 hover:bg-green-600 hover:text-white transition-colors"
@@ -77,8 +77,8 @@ export const Footer = () => {
               </li>
               <li className="flex items-center gap-2 text-white/80">
                 <MessageCircle size={18} className="shrink-0 text-amber-300" />
-                <a href="https://wa.me/6287726993572" target="_blank" rel="noopener noreferrer" className="hover:underline">
-                  +62 877-2699-3572 (Pesan WhatsApp)
+                <a href="https://wa.me/6281919491455" target="_blank" rel="noopener noreferrer" className="hover:underline">
+                  +62 819-1949-1455 (Pesan WhatsApp)
                 </a>
               </li>
               <li className="flex items-center gap-2 text-white/80">

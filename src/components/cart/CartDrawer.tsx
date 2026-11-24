@@ -436,15 +436,20 @@ export const CartDrawer: React.FC = () => {
                       <ArrowRight size={18} />
                     </Button>
                   ) : (
-                    <Button
-                      form="checkout-form"
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="w-full rounded-2xl bg-green-500 hover:bg-green-600 text-white font-black text-sm uppercase tracking-wider shadow-xl flex items-center justify-center gap-2 py-4 active:scale-95"
-                    >
-                      <MessageCircle size={20} />
-                      <span>{isSubmitting ? 'Memproses...' : 'Kirim Pesanan ke WhatsApp'}</span>
-                    </Button>
+                    <div className="space-y-2">
+                      <Button
+                        form="checkout-form"
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="w-full rounded-2xl bg-green-500 hover:bg-green-600 text-white font-black text-sm uppercase tracking-wider shadow-xl flex items-center justify-center gap-2 py-4 active:scale-95"
+                      >
+                        <MessageCircle size={20} />
+                        <span>{isSubmitting ? 'Mengarahkan...' : 'Kirim Pesanan ke WhatsApp'}</span>
+                      </Button>
+                      <p className="text-[11px] text-center text-amber-200/90 font-medium leading-relaxed">
+                        ⚠️ Aplikasi WhatsApp akan otomatis terbuka. Pastikan tekan tombol <strong>KIRIM (Send)</strong> di WhatsApp agar pesanan masuk ke kasir Agang.id.
+                      </p>
+                    </div>
                   )}
                 </div>
               )}
