@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-import heroGerobak from '@/assets/gerobak-hero.png';
+import heroFood from '@/assets/chicken chesee.jpg';
 
 export const HeroSection = () => {
   const handleWhatsAppOrder = () => {
@@ -77,9 +77,9 @@ export const HeroSection = () => {
               <div className="absolute inset-0 rounded-full bg-gradient-warm opacity-20 blur-3xl animate-pulse-glow" />
               <motion.div animate={{ y: [0, -10, 0] }} transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }} className="relative z-10">
                 <img
-                  src={heroGerobak}
-                  alt="Gerobak Usaha Street Food Agang.id Makassar"
-                  className="w-full h-full object-cover rounded-3xl shadow-2xl border border-white/10"
+                  src={heroFood}
+                  alt="Kuliner Rice Bowl, Taiwan Chicken & Dimsum Goreng Agang.id Makassar"
+                  className="w-full h-full object-cover rounded-3xl shadow-2xl"
                 />
               </motion.div>
             </div>
