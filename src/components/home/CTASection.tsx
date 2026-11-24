@@ -34,12 +34,18 @@ export const CTASection = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-2">
             <Button
               size="xl"
-              onClick={handleWhatsAppOrder}
+              asChild
               className="group bg-white text-red-950 hover:bg-neutral-100 font-black text-sm uppercase tracking-wider rounded-full px-8 py-4 shadow-2xl active:scale-95 flex items-center justify-center gap-2"
             >
-              <MessageCircle size={20} className="text-green-600" />
-              <span>Order via WhatsApp</span>
-              <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform text-red-600" />
+              <a
+                href={`https://wa.me/6281919491455?text=${encodeURIComponent('Halo Agang.id! Saya ingin memesan makanan. Boleh lihat menu lengkapnya?')}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <MessageCircle size={20} className="text-green-600" />
+                <span>Order via WhatsApp</span>
+                <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform text-red-600" />
+              </a>
             </Button>
           </div>
 

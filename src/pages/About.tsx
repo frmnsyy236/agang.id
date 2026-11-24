@@ -110,13 +110,27 @@ const About = () => {
                   </div>
 
                   <div className="flex gap-3 pt-4">
-                    <Button variant="whatsapp" className="flex-1" onClick={handleWhatsApp}>
-                      <MessageCircle size={18} />
-                      WhatsApp
+                    <Button variant="whatsapp" className="flex-1" asChild>
+                      <a
+                        href={`https://wa.me/6281919491455?text=${encodeURIComponent('Halo Agang.id! Saya ingin bertanya tentang menu dan layanan.')}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center gap-2"
+                      >
+                        <MessageCircle size={18} />
+                        <span>WhatsApp</span>
+                      </a>
                     </Button>
-                    <Button variant="outline" className="flex-1" onClick={() => window.open('https://instagram.com/agang.id', '_blank')}>
-                      <Instagram size={18} />
-                      Instagram
+                    <Button variant="outline" className="flex-1" asChild>
+                      <a
+                        href="https://instagram.com/agang.id"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center gap-2"
+                      >
+                        <Instagram size={18} />
+                        <span>Instagram</span>
+                      </a>
                     </Button>
                   </div>
                 </div>

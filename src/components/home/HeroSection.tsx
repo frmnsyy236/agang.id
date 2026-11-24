@@ -38,9 +38,15 @@ export const HeroSection = () => {
               {/* WhatsApp */}
               <div className="text-center sm:text-left">
                 {/* <p className="mb-2 text-muted-foreground select-text">Pesan langsung lewat WhatsApp kami</p> */}
-                <Button variant="hero" size="xl" onClick={handleWhatsAppOrder} className="group pointer-events-auto">
-                  Order via WhatsApp
-                  <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                <Button variant="hero" size="xl" asChild className="group pointer-events-auto">
+                  <a
+                    href={`https://wa.me/6281919491455?text=${encodeURIComponent('Halo Agang.id! Saya ingin memesan makanan. Boleh lihat menu lengkapnya?')}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Order via WhatsApp
+                    <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                  </a>
                 </Button>
               </div>
 

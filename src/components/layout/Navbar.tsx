@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, ShoppingBag } from 'lucide-react';
+import { Menu, X, ShoppingBag, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/CartContext';
 
@@ -81,8 +81,25 @@ export const Navbar = () => {
                 )}
               </button>
 
-              <Button variant="whatsapp" className="rounded-full px-6 bg-green-500 hover:bg-green-600 text-white" onClick={handleWhatsAppOrder}>
-                Order Sekarang
+              <Button
+                variant="whatsapp"
+                className="rounded-full px-5 py-2.5 bg-green-600 hover:bg-green-700 text-white font-bold text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition-all flex items-center gap-2 active:scale-95"
+                asChild
+              >
+                <a
+                  href={totalItems > 0 ? '#cart' : `https://wa.me/6281919491455?text=${encodeURIComponent('Halo Agang.id! Saya ingin memesan makanan.')}`}
+                  target={totalItems > 0 ? undefined : '_blank'}
+                  rel={totalItems > 0 ? undefined : 'noopener noreferrer'}
+                  onClick={(e) => {
+                    if (totalItems > 0) {
+                      e.preventDefault();
+                      setIsCartOpen(true);
+                    }
+                  }}
+                >
+                  <MessageCircle size={16} />
+                  <span>{totalItems > 0 ? `Checkout (${totalItems})` : 'Order Sekarang'}</span>
+                </a>
               </Button>
             </div>
 
@@ -145,8 +162,28 @@ export const Navbar = () => {
                 </span>
               </button>
 
-              <Button variant="whatsapp" className="w-full rounded-full bg-green-500 hover:bg-green-600 text-white" onClick={handleWhatsAppOrder}>
-                Order Sekarang
+              <Button
+                variant="whatsapp"
+                className="w-full rounded-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 shadow-md flex items-center justify-center gap-2"
+                asChild
+              >
+                <a
+                  href={totalItems > 0 ? '#cart' : `https://wa.me/6281919491455?text=${encodeURIComponent('Halo Agang.id! Saya ingin memesan makanan.')}`}
+                  target={totalItems > 0 ? undefined : '_blank'}
+                  rel={totalItems > 0 ? undefined : 'noopener noreferrer'}
+                  onClick={(e) => {
+                    if (totalItems > 0) {
+                      e.preventDefault();
+                      setIsOpen(false);
+                      setIsCartOpen(true);
+                    } else {
+                      setIsOpen(false);
+                    }
+                  }}
+                >
+                  <MessageCircle size={18} />
+                  <span>{totalItems > 0 ? `Checkout (${totalItems} Menu)` : 'Order Sekarang via WhatsApp'}</span>
+                </a>
               </Button>
             </div>
           </motion.div>
