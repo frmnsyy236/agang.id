@@ -24,6 +24,33 @@ import {
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 
+const DELIVERY_ZONES = [
+  {
+    id: 'radius_3km',
+    name: 'Radius ≤ 3 km (Rp7.000)',
+    fee: 7000,
+    desc: 'Sekitar Outlet (Maccini, Kerung-Kerung, Pongtiku, Bontoala, Karuwisi)',
+  },
+  {
+    id: 'radius_5km',
+    name: 'Radius 3 – 5 km (Rp10.000)',
+    fee: 10000,
+    desc: 'Panakkukang, Pettarani, Losari, Mamajang, Maricaya',
+  },
+  {
+    id: 'radius_8km',
+    name: 'Radius 5 – 8 km (Rp15.000)',
+    fee: 15000,
+    desc: 'Rappocini timur, Tamalate, Mariso, Antang, Tallo',
+  },
+  {
+    id: 'radius_far',
+    name: 'Radius > 8 km (Rp20.000)',
+    fee: 20000,
+    desc: 'Tamalanrea, Unhas, Daya, Sudiang, Barombong',
+  },
+];
+
 export const CartDrawer: React.FC = () => {
   const navigate = useNavigate();
   const {
@@ -46,6 +73,8 @@ export const CartDrawer: React.FC = () => {
     name: '',
     phone: '',
     deliveryType: 'delivery',
+    deliveryZone: 'Radius ≤ 3 km (Rp7.000)',
+    shippingFee: 7000,
     address: '',
     landmark: '',
     outlet: 'pongtiku',
@@ -270,7 +299,12 @@ export const CartDrawer: React.FC = () => {
                       <div className="grid grid-cols-2 gap-2">
                         <button
                           type="button"
-                          onClick={() => setCustomerData({ ...customerData, deliveryType: 'delivery' })}
+                          onClick={() => setCustomerData({
+                            ...customerData,
+                            deliveryType: 'delivery',
+                            shippingFee: customerData.shippingFee || 7000,
+                            deliveryZone: customerData.deliveryZone || 'Radius ≤ 3 km (Rp7.000)',
+                          })}
                           className={`p-3 rounded-2xl border text-xs font-bold flex flex-col items-center gap-1.5 transition-all ${
                             customerData.deliveryType === 'delivery'
                               ? 'bg-amber-400 text-red-950 border-amber-300 shadow-md font-black'
@@ -283,7 +317,12 @@ export const CartDrawer: React.FC = () => {
 
                         <button
                           type="button"
-                          onClick={() => setCustomerData({ ...customerData, deliveryType: 'pickup' })}
+                          onClick={() => setCustomerData({
+                            ...customerData,
+                            deliveryType: 'pickup',
+                            shippingFee: 0,
+                            deliveryZone: 'Ambil Sendiri di Outlet',
+                          })}
                           className={`p-3 rounded-2xl border text-xs font-bold flex flex-col items-center gap-1.5 transition-all ${
                             customerData.deliveryType === 'pickup'
                               ? 'bg-amber-400 text-red-950 border-amber-300 shadow-md font-black'
@@ -291,10 +330,72 @@ export const CartDrawer: React.FC = () => {
                           }`}
                         >
                           <span className="text-lg">🏬</span>
-                          <span>Ambil di Outlet</span>
+                          <span>Ambil di Outlet (Rp0)</span>
                         </button>
                       </div>
                     </div>
+
+                    {/* Jarak / Radius Pengantaran dari Outlet (Jika Delivery) */}
+                    {customerData.deliveryType === 'delivery' && (
+                      <div className="bg-[#400707] border border-amber-400/40 rounded-2xl p-3.5 space-y-2.5">
+                        <div className="flex items-center justify-between">
+                          <label className="block text-xs font-bold uppercase tracking-wider text-amber-300">
+                            Jarak Radius dari Outlet
+                          </label>
+                          <span className="text-[11px] font-black bg-amber-400 text-red-950 px-2 py-0.5 rounded-full shadow-sm">
+                            Ongkir: {formatPrice(customerData.shippingFee || 7000)}
+                          </span>
+                        </div>
+
+                        <div className="space-y-2">
+                          {DELIVERY_ZONES.map((zone) => {
+                            const isSelected =
+                              customerData.deliveryZone === zone.name ||
+                              (!customerData.deliveryZone && zone.id === 'radius_3km');
+                            return (
+                              <button
+                                key={zone.id}
+                                type="button"
+                                onClick={() =>
+                                  setCustomerData({
+                                    ...customerData,
+                                    deliveryZone: zone.name,
+                                    shippingFee: zone.fee,
+                                  })
+                                }
+                                className={`w-full p-2.5 rounded-xl border text-left transition-all flex items-center justify-between gap-2 cursor-pointer ${
+                                  isSelected
+                                    ? 'bg-amber-400 text-red-950 border-amber-300 font-bold shadow-md'
+                                    : 'bg-[#650c0c] text-white/90 border-white/10 hover:bg-[#771010]'
+                                }`}
+                              >
+                                <div className="min-w-0 flex-1">
+                                  <div className="text-xs font-black flex items-center gap-1.5">
+                                    <span>{zone.name}</span>
+                                  </div>
+                                  <p
+                                    className={`text-[10px] leading-tight mt-0.5 ${
+                                      isSelected ? 'text-red-950 font-semibold' : 'text-white/60'
+                                    }`}
+                                  >
+                                    {zone.desc}
+                                  </p>
+                                </div>
+                                <span
+                                  className={`text-xs font-black shrink-0 px-2 py-1 rounded-lg ${
+                                    isSelected
+                                      ? 'bg-red-700 text-white shadow-sm'
+                                      : 'bg-black/30 text-amber-300'
+                                  }`}
+                                >
+                                  {formatPrice(zone.fee)}
+                                </span>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
 
                     {/* Nama Pemesan */}
                     <div>
@@ -421,22 +522,45 @@ export const CartDrawer: React.FC = () => {
               {/* Footer */}
               {items.length > 0 && (
                 <div className="p-5 border-t border-white/10 bg-[#400707] space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs text-white/70 uppercase tracking-wider font-bold">
-                      Total Pesanan ({totalItems} Menu):
-                    </span>
-                    <span className="font-display text-xl sm:text-2xl font-black text-amber-300">
-                      {formatPrice(totalPrice)}
-                    </span>
-                  </div>
+                  {step === 1 ? (
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-white/70 uppercase tracking-wider font-bold">
+                        Subtotal ({totalItems} Menu):
+                      </span>
+                      <span className="font-display text-xl sm:text-2xl font-black text-amber-300">
+                        {formatPrice(totalPrice)}
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="space-y-1.5 pb-1">
+                      <div className="flex items-center justify-between text-xs text-white/75">
+                        <span>Subtotal Menu:</span>
+                        <span className="font-bold text-white">{formatPrice(totalPrice)}</span>
+                      </div>
+                      <div className="flex items-center justify-between text-xs text-white/75">
+                        <span>Ongkos Kirim ({customerData.deliveryType === 'delivery' ? (customerData.deliveryZone?.split('(')[0].trim() || 'Radius ≤ 3 km') : 'Ambil di Outlet'}):</span>
+                        <span className="font-bold text-amber-300">
+                          {customerData.deliveryType === 'delivery' ? formatPrice(customerData.shippingFee || 7000) : 'Gratis'}
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between pt-2 border-t border-white/15">
+                        <span className="text-xs uppercase tracking-wider font-black text-white">
+                          Total Pembayaran:
+                        </span>
+                        <span className="font-display text-xl sm:text-2xl font-black text-amber-300">
+                          {formatPrice(totalPrice + (customerData.deliveryType === 'delivery' ? (customerData.shippingFee || 7000) : 0))}
+                        </span>
+                      </div>
+                    </div>
+                  )}
 
                   {step === 1 ? (
                     <Button
                       size="xl"
                       onClick={handleNextStep}
-                      className="w-full rounded-2xl bg-amber-400 hover:bg-amber-300 text-red-950 font-black text-sm uppercase tracking-wider shadow-xl flex items-center justify-center gap-2 py-4 active:scale-95"
+                      className="w-full rounded-2xl bg-amber-400 hover:bg-amber-300 text-red-950 font-black text-sm uppercase tracking-wider shadow-xl flex items-center justify-center gap-2 py-4 active:scale-95 cursor-pointer"
                     >
-                      <span>Lanjut Isi Data Pengiriman</span>
+                      <span>Lanjut Isi Data & Ongkir</span>
                       <ArrowRight size={18} />
                     </Button>
                   ) : (
@@ -445,7 +569,7 @@ export const CartDrawer: React.FC = () => {
                         form="checkout-form"
                         type="submit"
                         disabled={isSubmitting}
-                        className="w-full rounded-2xl bg-green-500 hover:bg-green-600 text-white font-black text-sm uppercase tracking-wider shadow-xl flex items-center justify-center gap-2 py-4 active:scale-95"
+                        className="w-full rounded-2xl bg-green-500 hover:bg-green-600 text-white font-black text-sm uppercase tracking-wider shadow-xl flex items-center justify-center gap-2 py-4 active:scale-95 cursor-pointer"
                       >
                         <MessageCircle size={20} />
                         <span>{isSubmitting ? 'Mengarahkan...' : 'Kirim Pesanan ke WhatsApp'}</span>

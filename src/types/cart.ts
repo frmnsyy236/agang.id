@@ -12,6 +12,8 @@ export interface OrderCustomerData {
   name: string;
   phone: string;
   deliveryType: 'delivery' | 'pickup';
+  deliveryZone?: string;
+  shippingFee?: number;
   address: string;
   landmark?: string;
   outlet: 'pongtiku' | 'inpres_maccini';

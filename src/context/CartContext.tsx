@@ -164,12 +164,17 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return false;
     }
 
-    const orderId = `AG-${Date.now().toString().slice(-6)}`;
+    const shippingFee = customer.deliveryType === 'delivery' ? (customer.shippingFee !== undefined ? customer.shippingFee : 7000) : 0;
+    const grandTotal = totalPrice + shippingFee;
+
     const newOrder: OrderRecord = {
       id: orderId,
-      customer,
+      customer: {
+        ...customer,
+        shippingFee,
+      },
       items: [...items],
-      totalAmount: totalPrice,
+      totalAmount: grandTotal,
       status: 'pending',
       createdAt: new Date().toISOString(),
     };
@@ -212,6 +217,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (customer.landmark) {
         message += `🏢 *Patokan Lokasi:* ${customer.landmark}\n`;
       }
+      message += `📏 *Jarak / Radius:* ${customer.deliveryZone || 'Radius <= 3 km (Rp7.000)'}\n`;
     }
     message += `🏬 *Pilihan Outlet:* ${outletName}\n`;
     message += `💳 *Metode Pembayaran:* ${paymentLabel}\n`;
@@ -221,10 +227,11 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     message += `-----------------------------------------\n`;
     message += `*RINCIAN MENU:*\n${itemsList}`;
     message += `-----------------------------------------\n`;
-    message += `💰 *TOTAL PESANAN:* *${formatPrice(totalPrice)}*\n`;
+    message += `Subtotal Menu: ${formatPrice(totalPrice)}\n`;
     if (customer.deliveryType === 'delivery') {
-      message += `_(Ongkir akan dihitung & dikonfirmasi kasir)_\n`;
+      message += `🛵 Ongkos Kirim: ${formatPrice(shippingFee)}\n`;
     }
+    message += `💰 *TOTAL KESELURUHAN:* *${formatPrice(grandTotal)}*\n`;
     message += `-----------------------------------------\n`;
     message += `Halo kasir Agang.id! Mohon diproses dan konfirmasi pesanan saya ya. Terima kasih! 🙏`;
 
