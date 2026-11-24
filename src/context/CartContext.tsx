@@ -164,6 +164,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return false;
     }
 
+    const orderId = `AG-${Date.now().toString().slice(-6)}`;
     const shippingFee = customer.deliveryType === 'delivery' ? (customer.shippingFee !== undefined ? customer.shippingFee : 7000) : 0;
     const grandTotal = totalPrice + shippingFee;
 
